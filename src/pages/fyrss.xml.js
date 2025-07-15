@@ -46,4 +46,4 @@ export async function GET(Astro) {
   response.headers.set('Cache-Control', 'public, max-age=3600')
 
   return response
-}
+} 

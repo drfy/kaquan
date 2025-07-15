@@ -134,6 +134,9 @@ LINKS=Title1,URL1;Title2,URL3;Title3,URL3;
 ## Sidebar Navigation Item, Separate using commas and semicolons
 NAVS=Title1,URL1;Title2,URL3;Title3,URL3;
 
+## Enable RSS feed display in header
+RSS_ENABLED=true
+
 ## Enable RSS beautify
 RSS_BEAUTIFY=true
 ```

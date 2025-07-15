@@ -13,6 +13,7 @@ import bluesky from '../assets/bluesky.svg'
 const { SITE_URL, RSS_URL } = Astro.locals
 const { channel } = Astro.props
 
+const RSS_ENABLED = getEnv(import.meta.env, Astro, 'RSS_ENABLED')
 const PODCASRT = getEnv(import.meta.env, Astro, 'PODCASRT')
 const TWITTER = getEnv(import.meta.env, Astro, 'TWITTER')
 const GITHUB = getEnv(import.meta.env, Astro, 'GITHUB')
@@ -39,9 +40,13 @@ const staticProxy = getEnv(import.meta.env, Astro, 'STATIC_PROXY') ?? '/static/'
     </a>
   </div>
   <div class="header-icons">
-    <a href={RSS_URL} target="_blank" rel="alternate" type="application/rss+xml" title="RSS Feed">
-      <img {...rss} alt="RSS" class="social-icon" width="1em" />
-    </a>
+    {
+      RSS_ENABLED && (
+        <a href={RSS_URL} target="_blank" rel="alternate" type="application/rss+xml" title="RSS Feed">
+          <img {...rss} alt="RSS" class="social-icon" width="1em" />
+        </a>
+      )
+    }
 
     {
       PODCASRT && (
