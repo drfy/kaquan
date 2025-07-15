@@ -110,10 +110,10 @@ const navs = (getEnv(import.meta.env, Astro, 'NAVS') || '')
                   <div class="nav-item">
                     <a
                       href={`${SITE_URL}tags`}
-                      title="Tags"
+                      title="标签"
                       class={`nav-link ${pathname === '/tags' ? 'current' : ''}`}
                     >
-                      Tags
+                      标签
                     </a>
                   </div>
                 ) : null
@@ -123,10 +123,10 @@ const navs = (getEnv(import.meta.env, Astro, 'NAVS') || '')
                   <div class="nav-item">
                     <a
                       href={`${SITE_URL}links`}
-                      title="Links"
+                      title="外部链接"
                       class={`nav-link ${pathname === '/links' ? 'current' : ''}`}
                     >
-                      Links
+                      外部链接
                     </a>
                   </div>
                 ) : null
@@ -141,10 +141,10 @@ const navs = (getEnv(import.meta.env, Astro, 'NAVS') || '')
                 ))
               }
             </div>
-            <input class="search-icon" name="icon" type="checkbox" placeholder="Search" />
+            <input class="search-icon" name="icon" type="checkbox" placeholder="🔍" />
             <form class="search-form" action={searchAction} method="get">
               {GOOGLE_SEARCH_SITE ? <input type="hidden" name="as_sitesearch" value={GOOGLE_SEARCH_SITE} /> : null}
-              <input type="text" name="q" placeholder="Search" />
+              <input type="text" name="q" placeholder="🔍" />
             </form>
             <div class="copyright-wrap">
               Powered by

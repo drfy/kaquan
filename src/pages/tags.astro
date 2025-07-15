@@ -7,7 +7,7 @@ import { getEnv } from '../lib/env'
 const channel = await getChannelInfo(Astro)
 
 channel.seo = {
-  title: 'Tags',
+  title: '标签',
 }
 
 const tags = (getEnv(import.meta.env, Astro, 'TAGS') || '').split(',')
@@ -18,7 +18,7 @@ const tags = (getEnv(import.meta.env, Astro, 'TAGS') || '').split(',')
     <Header channel={channel} />
   </slot>
 
-  <div class="section-title">Tags</div>
+  <div class="section-title">标签</div>
 
   <div class="tag-cloud">
     {
