@@ -79,6 +79,28 @@ const navs = (getEnv(import.meta.env, Astro, 'NAVS') || '')
         navigation: auto; /* enabled */
       }
     </style>
+    <script is:inline>
+      // 立即设置初始主题，避免闪烁
+      (function() {
+        const hour = new Date().getHours();
+        const isNight = hour < 6 || hour >= 18;
+        const initialTheme = isNight ? 'night' : 'day';
+        
+        // 立即设置主题属性
+        if (document.documentElement) {
+          document.documentElement.setAttribute('data-theme', initialTheme);
+        }
+        
+        // 等DOM body可用时再次设置
+        if (document.body) {
+          document.body.setAttribute('data-theme', initialTheme);
+        } else {
+          document.addEventListener('DOMContentLoaded', function() {
+            document.body.setAttribute('data-theme', initialTheme);
+          });
+        }
+      })();
+    </script>
     <SEO
       titleTemplate={`%s | ${channel?.title}`}
       titleDefault={[channel?.title, seoParams.description].filter(Boolean).join(' - ')}
@@ -189,6 +211,78 @@ const navs = (getEnv(import.meta.env, Astro, 'NAVS') || '')
     <a href="#wrapper" id="back-to-top" aria-label="Back to top">
       <img {...backToTopIcon} alt="Back to Top" />
     </a>
+    <script is:inline>
+      // 完整的主题切换器
+      class ThemeSwitcher {
+        constructor() {
+          this.init();
+        }
+
+        init() {
+          this.applyTimeBasedTheme();
+          
+          setInterval(() => {
+            this.applyTimeBasedTheme();
+          }, 60000);
+          
+          document.addEventListener('visibilitychange', () => {
+            if (!document.hidden) {
+              this.applyTimeBasedTheme();
+            }
+          });
+        }
+
+        isNightTime() {
+          const hour = new Date().getHours();
+          return hour < 6 || hour >= 18;
+        }
+
+        applyTimeBasedTheme() {
+          const isNight = this.isNightTime();
+          const currentTheme = document.body.getAttribute('data-theme');
+          const newTheme = isNight ? 'night' : 'day';
+          
+          if (currentTheme !== newTheme) {
+            document.body.setAttribute('data-theme', newTheme);
+            document.documentElement.setAttribute('data-theme', newTheme);
+            this.updateThemeColor(isNight);
+            
+            document.dispatchEvent(new CustomEvent('themechange', {
+              detail: { theme: newTheme, isNight }
+            }));
+          }
+        }
+
+        updateThemeColor(isNight) {
+          let themeColorMeta = document.querySelector('meta[name="theme-color"]');
+          if (themeColorMeta) {
+            const themeColor = isNight ? '#0d1117' : '#f4f1ec';
+            themeColorMeta.content = themeColor;
+          }
+        }
+
+        setTheme(theme) {
+          if (['day', 'night'].includes(theme)) {
+            document.body.setAttribute('data-theme', theme);
+            document.documentElement.setAttribute('data-theme', theme);
+            this.updateThemeColor(theme === 'night');
+          }
+        }
+
+        getCurrentTheme() {
+          return document.body.getAttribute('data-theme') || 'day';
+        }
+      }
+
+      // 初始化主题切换器
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', () => {
+          window.themeSwitcher = new ThemeSwitcher();
+        });
+      } else {
+        window.themeSwitcher = new ThemeSwitcher();
+      }
+    </script>
     <Fragment set:html={FOOTER_INJECT} />
   </body>
 </html>
