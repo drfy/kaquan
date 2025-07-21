@@ -67,8 +67,7 @@ const isRelativeTime = !datetime.isBefore(dayjs().subtract(1, 'w'))
   </div>
   {
     post.tags.length > 0 && (
-      <div class="tag-box tag-box-top">
-        <div class="tag-icon bright-emoji">🏷️</div>
+      <div class="tag-box tag-box-clean">
         {post.tags.map((tag) => (
           <a href={`/search/%23${tag}`} title={tag} class="tag enhanced-tag">
             {tag}
