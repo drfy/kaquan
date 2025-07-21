@@ -88,6 +88,12 @@ const navs = (getEnv(import.meta.env, Astro, 'NAVS') || '')
         const isNight = hour < 6 || hour >= 18;
         const initialTheme = isNight ? 'night' : 'day';
         
+        // 首先禁用所有过渡动画
+        const style = document.createElement('style');
+        style.innerHTML = '*, *::before, *::after { transition: none !important; animation: none !important; }';
+        style.id = 'disable-transitions';
+        document.head.appendChild(style);
+        
         // 立即设置主题属性
         if (document.documentElement) {
           document.documentElement.setAttribute('data-theme', initialTheme);
@@ -107,6 +113,14 @@ const navs = (getEnv(import.meta.env, Astro, 'NAVS') || '')
         if (themeColorMeta) {
           themeColorMeta.content = isNight ? '#0c0c0f' : '#f4f1ec';
         }
+        
+        // 延迟移除过渡禁用样式
+        setTimeout(() => {
+          const disableStyle = document.getElementById('disable-transitions');
+          if (disableStyle) {
+            disableStyle.remove();
+          }
+        }, 100);
       })();
     </script>
     <SEO
@@ -368,17 +382,29 @@ const navs = (getEnv(import.meta.env, Astro, 'NAVS') || '')
       function initTheme() {
         window.themeSwitcher = new ThemeSwitcher();
         
-        // 设置初始文本显示
-        const initialTheme = document.body.getAttribute('data-theme') || 'day';
-        window.themeSwitcher.updateThemeText(initialTheme);
+        // 立即获取当前主题并更新文本
+        const currentTheme = document.body.getAttribute('data-theme') || 'day';
+        
+        // 强制更新主题文本
+        setTimeout(() => {
+          window.themeSwitcher.updateThemeText(currentTheme);
+        }, 50);
         
         // 绑定按钮点击事件
         const toggleButton = document.getElementById('theme-toggle');
         if (toggleButton) {
           toggleButton.addEventListener('click', () => {
+            // 添加小延迟防止闪烁
+            toggleButton.style.pointerEvents = 'none';
             window.themeSwitcher.toggleTheme();
+            setTimeout(() => {
+              toggleButton.style.pointerEvents = 'auto';
+            }, 200);
           });
         }
+        
+        // 应用时间基准主题并确保文本同步
+        window.themeSwitcher.applyTimeBasedTheme();
       }
 
       if (document.readyState === 'loading') {
