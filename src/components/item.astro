@@ -25,12 +25,12 @@ const isRelativeTime = !datetime.isBefore(dayjs().subtract(1, 'w'))
   <div class="time-box">
     <div class="dot"></div>
     <div class="time">
-      <a href={`${SITE_URL}posts/${post.id}`} title={post.datetime} class="item-link">
-        <time datetime={post.datetime} title={timeago}>
+      <a href={`${SITE_URL}posts/${post.id}`} title="点击查看详情" class="item-link">
+        <time datetime={post.datetime} title="点击查看详情">
           {timeago}
           {isRelativeTime && (
             <span class="full-time">
-              🕒 ({fullDatetime})
+              <span class="pointer-emoji">👆</span> ({fullDatetime})
             </span>
           )}
         </time>
@@ -65,19 +65,19 @@ const isRelativeTime = !datetime.isBefore(dayjs().subtract(1, 'w'))
       </div>
     )}
   </div>
-  {post.content.length > 0 && <div class={`text-box content`} set:html={post.content} />}
   {
     post.tags.length > 0 && (
-      <div class="tag-box" style={post.content.length === 0 ? 'padding-top: 30px;' : ''}>
-        <div class="tag-icon" />
+      <div class="tag-box tag-box-top">
+        <div class="tag-icon bright-emoji">🏷️</div>
         {post.tags.map((tag) => (
-          <a href={`/search/%23${tag}`} title={tag} class="tag">
+          <a href={`/search/%23${tag}`} title={tag} class="tag enhanced-tag">
             {tag}
           </a>
         ))}
       </div>
     )
   }
+  {post.content.length > 0 && <div class={`text-box content`} set:html={post.content} />}
 
   {
     COMMENTS && isItem && (
