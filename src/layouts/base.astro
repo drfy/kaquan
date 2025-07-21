@@ -150,19 +150,19 @@ const navs = (getEnv(import.meta.env, Astro, 'NAVS') || '')
               <div class="channel-stats">
                 {channel.stats.subscribers > 0 && (
                   <div class="stat-item">
-                    <span class="stat-emoji bright-emoji">👥</span>
+                    <span class="stat-emoji bright-emoji stats-emoji">🔥</span>
                     <span class="stat-text">{channel.stats.subscribers} 订阅者</span>
                   </div>
                 )}
                 {channel.stats.photos > 0 && (
                   <div class="stat-item">
-                    <span class="stat-emoji bright-emoji">📸</span>
+                    <span class="stat-emoji bright-emoji stats-emoji">🌈</span>
                     <span class="stat-text">{channel.stats.photos} 图片</span>
                   </div>
                 )}
                 {channel.stats.links > 0 && (
                   <div class="stat-item">
-                    <span class="stat-emoji bright-emoji">🔗</span>
+                    <span class="stat-emoji bright-emoji stats-emoji">⚡</span>
                     <span class="stat-text">{channel.stats.links} 链接</span>
                   </div>
                 )}
