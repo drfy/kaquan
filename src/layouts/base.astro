@@ -174,7 +174,7 @@ const navs = (getEnv(import.meta.env, Astro, 'NAVS') || '')
                 <button id="theme-toggle" class="theme-toggle-btn" title="切换主题">
                   <span class="theme-icon day-icon">☀️</span>
                   <span class="theme-icon night-icon">🌙</span>
-                  <span class="toggle-text">主题</span>
+                  <span class="toggle-text" id="theme-text">主题</span>
                 </button>
               </div>
             </div>
@@ -252,6 +252,13 @@ const navs = (getEnv(import.meta.env, Astro, 'NAVS') || '')
           return hour < 6 || hour >= 18;
         }
 
+        updateThemeText(theme) {
+          const themeText = document.getElementById('theme-text');
+          if (themeText) {
+            themeText.textContent = theme === 'night' ? '夜晚' : '白天';
+          }
+        }
+
         applyTimeBasedTheme() {
           const isNight = this.isNightTime();
           const currentTheme = document.body.getAttribute('data-theme');
@@ -261,6 +268,7 @@ const navs = (getEnv(import.meta.env, Astro, 'NAVS') || '')
             document.body.setAttribute('data-theme', newTheme);
             document.documentElement.setAttribute('data-theme', newTheme);
             this.updateThemeColor(isNight);
+            this.updateThemeText(newTheme);
             
             document.dispatchEvent(new CustomEvent('themechange', {
               detail: { theme: newTheme, isNight }
@@ -287,6 +295,7 @@ const navs = (getEnv(import.meta.env, Astro, 'NAVS') || '')
             document.body.setAttribute('data-theme', theme);
             document.documentElement.setAttribute('data-theme', theme);
             this.updateThemeColor(theme === 'night');
+            this.updateThemeText(theme);
             
             // 保存用户手动选择的主题偏好
             localStorage.setItem('user-theme-preference', theme);
@@ -332,6 +341,7 @@ const navs = (getEnv(import.meta.env, Astro, 'NAVS') || '')
               document.body.setAttribute('data-theme', userTheme);
               document.documentElement.setAttribute('data-theme', userTheme);
               this.updateThemeColor(userTheme === 'night');
+              this.updateThemeText(userTheme);
             }
             return;
           }
@@ -345,6 +355,7 @@ const navs = (getEnv(import.meta.env, Astro, 'NAVS') || '')
             document.body.setAttribute('data-theme', newTheme);
             document.documentElement.setAttribute('data-theme', newTheme);
             this.updateThemeColor(isNight);
+            this.updateThemeText(newTheme);
             
             document.dispatchEvent(new CustomEvent('themechange', {
               detail: { theme: newTheme, isNight, manual: false }
@@ -356,6 +367,10 @@ const navs = (getEnv(import.meta.env, Astro, 'NAVS') || '')
       // 初始化主题切换器和按钮事件
       function initTheme() {
         window.themeSwitcher = new ThemeSwitcher();
+        
+        // 设置初始文本显示
+        const initialTheme = document.body.getAttribute('data-theme') || 'day';
+        window.themeSwitcher.updateThemeText(initialTheme);
         
         // 绑定按钮点击事件
         const toggleButton = document.getElementById('theme-toggle');
