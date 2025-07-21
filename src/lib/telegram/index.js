@@ -138,6 +138,16 @@ function getPost($, item, { channel, staticProxy, index = 0 }) {
     $(a)?.attr('href', `/search/${encodeURIComponent($(a)?.text())}`)
   })?.map((_index, a) => $(a)?.text()?.replace('#', ''))?.get()
 
+  // 提取文章查看数和互动数据
+  const viewsText = $(item).find('.tgme_widget_message_views')?.text() || ''
+  const viewsMatch = viewsText.match(/(\d+(?:\.\d+)?[KMB]?)/i)
+  const views = viewsMatch ? viewsMatch[1] : '0'
+  
+  // 提取转发/评论数（如果有的话）
+  const forwardsText = $(item).find('.tgme_widget_message_forwards')?.text() || ''
+  const forwardsMatch = forwardsText.match(/(\d+(?:\.\d+)?[KMB]?)/i)
+  const forwards = forwardsMatch ? forwardsMatch[1] : '0'
+
   return {
     id,
     title,
@@ -145,6 +155,8 @@ function getPost($, item, { channel, staticProxy, index = 0 }) {
     datetime: $(item).find('.tgme_widget_message_date time')?.attr('datetime'),
     tags,
     text: content?.text(),
+    views,
+    forwards,
     content: [
       getReply($, item, { channel }),
       getImages($, item, { staticProxy, id, index, title }),
@@ -218,12 +230,23 @@ export async function getChannelInfo(Astro, { before = '', after = '', q = '', t
     return getPost($, item, { channel, staticProxy, index })
   })?.get()?.reverse().filter(post => ['text'].includes(post.type) && post.id && post.content)
 
+  // 提取频道统计信息
+  const statsText = $('.tgme_channel_info_counters')?.text() || ''
+  const subscribersMatch = statsText.match(/(\d+)\s*subscribers?/i)
+  const photosMatch = statsText.match(/(\d+)\s*photos?/i)
+  const linksMatch = statsText.match(/(\d+)\s*links?/i)
+  
   const channelInfo = {
     posts,
     title: $('.tgme_channel_info_header_title')?.text(),
     description: $('.tgme_channel_info_description')?.text(),
     descriptionHTML: modifyHTMLContent($, $('.tgme_channel_info_description'))?.html(),
     avatar: $('.tgme_page_photo_image img')?.attr('src'),
+    stats: {
+      subscribers: subscribersMatch ? parseInt(subscribersMatch[1]) : 0,
+      photos: photosMatch ? parseInt(photosMatch[1]) : 0, 
+      links: linksMatch ? parseInt(linksMatch[1]) : 0,
+    }
   }
 
   cache.set(cacheKey, channelInfo)

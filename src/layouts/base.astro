@@ -146,6 +146,28 @@ const navs = (getEnv(import.meta.env, Astro, 'NAVS') || '')
               {GOOGLE_SEARCH_SITE ? <input type="hidden" name="as_sitesearch" value={GOOGLE_SEARCH_SITE} /> : null}
               <input type="text" name="q" placeholder="🔍" />
             </form>
+            {channel?.stats && (channel.stats.subscribers > 0 || channel.stats.photos > 0 || channel.stats.links > 0) && (
+              <div class="channel-stats">
+                {channel.stats.subscribers > 0 && (
+                  <div class="stat-item">
+                    <span class="stat-emoji">👥</span>
+                    <span class="stat-text">{channel.stats.subscribers} subscribers</span>
+                  </div>
+                )}
+                {channel.stats.photos > 0 && (
+                  <div class="stat-item">
+                    <span class="stat-emoji">📸</span>
+                    <span class="stat-text">{channel.stats.photos} photos</span>
+                  </div>
+                )}
+                {channel.stats.links > 0 && (
+                  <div class="stat-item">
+                    <span class="stat-emoji">🔗</span>
+                    <span class="stat-text">{channel.stats.links} links</span>
+                  </div>
+                )}
+              </div>
+            )}
             <div class="copyright-wrap">
               Powered by
               <a

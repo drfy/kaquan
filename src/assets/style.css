@@ -372,6 +372,52 @@ audio::-webkit-media-controls-panel {
   padding-left: 10px;
 }
 
+/* 时间增强显示样式 */
+.full-time {
+  font-size: 12px;
+  color: var(--secondary-color);
+  opacity: 0.8;
+  margin-left: 4px;
+}
+
+/* 文章互动数据样式 */
+.interaction-stats {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: 10px;
+}
+
+.stat-link {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  color: var(--secondary-color);
+  text-decoration: none;
+  font-size: 12px;
+  padding: 2px 6px;
+  border-radius: 12px;
+  background: var(--code-background-color);
+  border: 1px solid var(--border-color);
+  transition: all 0.2s ease;
+}
+
+.stat-link:hover {
+  color: var(--link-color);
+  border-color: var(--link-color);
+  background: var(--cell-background-color);
+  transform: translateY(-1px);
+  box-shadow: var(--shadows);
+}
+
+.stat-link .stat-emoji {
+  font-size: 11px;
+}
+
+.stat-link .stat-text {
+  font-weight: 500;
+}
+
 #aside-container {
   padding-bottom: 20px;
   width: 200px;
@@ -913,5 +959,23 @@ li:has(input[type='checkbox']:checked:disabled)::before {
     margin-left: 0px;
     margin-top: 20px;
     margin-bottom: 20px;
+  }
+
+  /* 移动端互动数据样式优化 */
+  .interaction-stats {
+    margin-left: 0px;
+    margin-top: 4px;
+  }
+
+  .stat-link {
+    font-size: 11px;
+    padding: 1px 4px;
+  }
+
+  .full-time {
+    display: block;
+    margin-left: 0;
+    margin-top: 2px;
+    font-size: 11px;
   }
 }
