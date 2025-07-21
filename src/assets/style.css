@@ -2,7 +2,7 @@
   /* 日间主题变量 - 参考ip.ll.sd白天主题 */
   --background-color: transparent;
   --foreground-color: #1565c0;
-  --highlight-color: #ff6f00;
+  --highlight-color: #1976d2;
   --box-border-radius: 12px;
   --media-border-radius: 16px;
   --dot-size: 8px;
@@ -59,27 +59,39 @@ body {
   transition: background 0.4s ease, color 0.3s ease;
 }
 
-/* 白天主题背景 - 参考ip.ll.sd清晨天空效果 */
+/* 白天主题背景 - 参考ip.ll.sd六边形蜂窝纹理 */
 body {
-  background: linear-gradient(180deg,
-      #e3f2fd 0%,
-      #bbdefb 25%,
-      #90caf9 50%,
-      #64b5f6 75%,
-      #42a5f5 100%);
+  background:
+    radial-gradient(circle at 50% 50%, transparent 40%, rgba(21, 101, 192, 0.05) 41%, rgba(21, 101, 192, 0.05) 60%, transparent 61%),
+    linear-gradient(90deg, transparent 24%, rgba(21, 101, 192, 0.05) 25%, rgba(21, 101, 192, 0.05) 26%, transparent 27%, transparent 74%, rgba(21, 101, 192, 0.05) 75%, rgba(21, 101, 192, 0.05) 76%, transparent 77%),
+    linear-gradient(30deg, transparent 24%, rgba(21, 101, 192, 0.05) 25%, rgba(21, 101, 192, 0.05) 26%, transparent 27%, transparent 74%, rgba(21, 101, 192, 0.05) 75%, rgba(21, 101, 192, 0.05) 76%, transparent 77%),
+    linear-gradient(-30deg, transparent 24%, rgba(21, 101, 192, 0.05) 25%, rgba(21, 101, 192, 0.05) 26%, transparent 27%, transparent 74%, rgba(21, 101, 192, 0.05) 75%, rgba(21, 101, 192, 0.05) 76%, transparent 77%),
+    linear-gradient(180deg,
+      #f8fbff 0%,
+      #e8f4fd 25%,
+      #ddeefb 50%,
+      #d1e7f8 75%,
+      #c5e0f5 100%);
+  background-size: 50px 50px, 50px 50px, 50px 50px, 50px 50px, 100% 100%;
   background-attachment: fixed;
   min-height: 100vh;
   position: relative;
 }
 
-/* 夜间模式背景 - 参考ip.ll.sd夜空效果 */
+/* 夜间模式背景 - 参考ip.ll.sd六边形夜空效果 */
 [data-theme="night"] body {
-  background: linear-gradient(180deg,
+  background:
+    radial-gradient(circle at 50% 50%, transparent 40%, rgba(255, 255, 255, 0.02) 41%, rgba(255, 255, 255, 0.02) 60%, transparent 61%),
+    linear-gradient(90deg, transparent 24%, rgba(255, 255, 255, 0.02) 25%, rgba(255, 255, 255, 0.02) 26%, transparent 27%, transparent 74%, rgba(255, 255, 255, 0.02) 75%, rgba(255, 255, 255, 0.02) 76%, transparent 77%),
+    linear-gradient(30deg, transparent 24%, rgba(255, 255, 255, 0.02) 25%, rgba(255, 255, 255, 0.02) 26%, transparent 27%, transparent 74%, rgba(255, 255, 255, 0.02) 75%, rgba(255, 255, 255, 0.02) 76%, transparent 77%),
+    linear-gradient(-30deg, transparent 24%, rgba(255, 255, 255, 0.02) 25%, rgba(255, 255, 255, 0.02) 26%, transparent 27%, transparent 74%, rgba(255, 255, 255, 0.02) 75%, rgba(255, 255, 255, 0.02) 76%, transparent 77%),
+    linear-gradient(180deg,
       #0d1421 0%,
       #1a1f3a 25%,
       #2d3561 50%,
       #1e2746 75%,
       #11142d 100%);
+  background-size: 50px 50px, 50px 50px, 50px 50px, 50px 50px, 100% 100%;
   background-attachment: fixed;
   min-height: 100vh;
 }
@@ -194,6 +206,19 @@ body {
   border-color: var(--highlight-color);
   transform: translateY(-1px);
   box-shadow: var(--shadows-hover);
+}
+
+/* 白天模式按钮样式优化 */
+[data-theme="day"] .theme-toggle-btn {
+  background: rgba(255, 255, 255, 0.9);
+  border-color: rgba(21, 101, 192, 0.2);
+  color: #1565c0;
+}
+
+[data-theme="day"] .theme-toggle-btn:hover {
+  background: rgba(255, 255, 255, 0.95);
+  border-color: #1976d2;
+  box-shadow: 0 4px 16px rgba(25, 118, 210, 0.2);
 }
 
 .theme-icon {
