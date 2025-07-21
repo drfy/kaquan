@@ -103,7 +103,7 @@ const navs = (getEnv(import.meta.env, Astro, 'NAVS') || '')
         // 立即更新浏览器主题色
         let themeColorMeta = document.querySelector('meta[name="theme-color"]');
         if (themeColorMeta) {
-          themeColorMeta.content = isNight ? '#1e1e2e' : '#f4f1ec';
+          themeColorMeta.content = isNight ? '#11142d' : '#42a5f5';
         }
       })();
     </script>
@@ -269,7 +269,7 @@ const navs = (getEnv(import.meta.env, Astro, 'NAVS') || '')
         updateThemeColor(isNight) {
           let themeColorMeta = document.querySelector('meta[name="theme-color"]');
           if (themeColorMeta) {
-            const themeColor = isNight ? '#1e1e2e' : '#f4f1ec';
+            const themeColor = isNight ? '#11142d' : '#42a5f5';
             themeColorMeta.content = themeColor;
           }
         }

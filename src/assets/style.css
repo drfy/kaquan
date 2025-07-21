@@ -1,46 +1,45 @@
 :root {
-  /* 日间主题变量 (保持现有) */
-  --background-color: #f4f1ec;
-  --foreground-color: #000000;
-  --highlight-color: orangered;
+  /* 日间主题变量 - 参考ip.ll.sd白天主题 */
+  --background-color: transparent;
+  --foreground-color: #1565c0;
+  --highlight-color: #ff6f00;
   --box-border-radius: 12px;
   --media-border-radius: 16px;
   --dot-size: 8px;
-  --shadows: 0 2px 8px rgba(0, 0, 0, 0.06), 0 4px 16px rgba(0, 0, 0, 0.04),
-    0 8px 32px rgba(0, 0, 0, 0.02);
-  --shadows-hover: 0 4px 16px rgba(0, 0, 0, 0.08), 0 8px 32px rgba(0, 0, 0, 0.06),
-    0 16px 64px rgba(0, 0, 0, 0.04);
+  --shadows: 0 2px 8px rgba(21, 101, 192, 0.15), 0 4px 16px rgba(21, 101, 192, 0.10),
+    0 8px 32px rgba(21, 101, 192, 0.05);
+  --shadows-hover: 0 4px 16px rgba(21, 101, 192, 0.20), 0 8px 32px rgba(21, 101, 192, 0.15),
+    0 16px 64px rgba(21, 101, 192, 0.10);
   --box-margin: 10px;
-  --border-color: rgba(0, 0, 0, 0.08);
+  --border-color: rgba(21, 101, 192, 0.12);
   --link-color: var(--highlight-color);
   --icon-hover-filter: invert(51%) sepia(0%) saturate(0%) hue-rotate(23deg) brightness(90%) contrast(90%);
   --icon-secondary-filter: invert(97%) sepia(0%) saturate(0%) hue-rotate(129deg) brightness(86%) contrast(88%);
-  --cell-background-color: rgba(255, 255, 255, 0.9);
-  --code-background-color: rgba(249, 249, 249, 0.8);
-  --secondary-color: #999;
+  --cell-background-color: rgba(255, 255, 255, 0.85);
+  --code-background-color: rgba(255, 255, 255, 0.7);
+  --secondary-color: #5e7ce2;
 }
 
-/* 夜间主题变量 - 现代深色主题 */
+/* 夜间主题变量 - 参考ip.ll.sd夜空主题 */
 [data-theme="night"] {
-  --background-color: linear-gradient(135deg, #1e1e2e 0%, #2a2a3a 50%, #1a1a28 100%);
-  --background-solid: #1e1e2e;
-  --foreground-color: #cdd6f4;
-  --highlight-color: #f38ba8;
+  --background-color: #11142d;
+  --background-solid: #11142d;
+  --foreground-color: #e8eaed;
+  --highlight-color: #ffa726;
   --shadows: 0 2px 8px rgba(0, 0, 0, 0.4), 0 4px 16px rgba(0, 0, 0, 0.3),
     0 8px 32px rgba(0, 0, 0, 0.2);
   --shadows-hover: 0 4px 16px rgba(0, 0, 0, 0.5), 0 8px 32px rgba(0, 0, 0, 0.4),
     0 16px 64px rgba(0, 0, 0, 0.3);
-  --border-color: rgba(205, 214, 244, 0.12);
+  --border-color: rgba(232, 234, 237, 0.15);
   --icon-hover-filter: invert(89%) sepia(6%) saturate(1629%) hue-rotate(200deg) brightness(99%) contrast(89%);
   --icon-secondary-filter: invert(59%) sepia(12%) saturate(1058%) hue-rotate(200deg) brightness(96%) contrast(91%);
-  --cell-background-color: rgba(49, 50, 68, 0.8);
-  --code-background-color: rgba(30, 30, 46, 0.6);
-  --secondary-color: #a6adc8;
+  --cell-background-color: rgba(255, 255, 255, 0.08);
+  --code-background-color: rgba(255, 255, 255, 0.05);
+  --secondary-color: #bdc1c6;
 }
 
 /* 平滑主题切换动画 */
 body {
-  background-color: var(--background-color);
   color: var(--foreground-color);
   font-family:
     ui-sans-serif,
@@ -60,11 +59,61 @@ body {
   transition: background 0.4s ease, color 0.3s ease;
 }
 
-/* 夜间模式特殊背景处理 */
-[data-theme="night"] body {
-  background: linear-gradient(135deg, #1e1e2e 0%, #2a2a3a 50%, #1a1a28 100%);
+/* 白天主题背景 - 参考ip.ll.sd清晨天空效果 */
+body {
+  background: linear-gradient(180deg,
+      #e3f2fd 0%,
+      #bbdefb 25%,
+      #90caf9 50%,
+      #64b5f6 75%,
+      #42a5f5 100%);
   background-attachment: fixed;
   min-height: 100vh;
+  position: relative;
+}
+
+/* 夜间模式背景 - 参考ip.ll.sd夜空效果 */
+[data-theme="night"] body {
+  background: linear-gradient(180deg,
+      #0d1421 0%,
+      #1a1f3a 25%,
+      #2d3561 50%,
+      #1e2746 75%,
+      #11142d 100%);
+  background-attachment: fixed;
+  min-height: 100vh;
+}
+
+/* 夜间模式星空效果 */
+[data-theme="night"] body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image:
+    radial-gradient(1px 1px at 25px 15px, #fff, transparent),
+    radial-gradient(1px 1px at 75px 45px, #fff, transparent),
+    radial-gradient(1px 1px at 125px 85px, #fff, transparent),
+    radial-gradient(1px 1px at 200px 25px, #fff, transparent),
+    radial-gradient(1px 1px at 300px 105px, #fff, transparent),
+    radial-gradient(1px 1px at 400px 65px, #fff, transparent);
+  background-repeat: repeat;
+  background-size: 450px 150px;
+  opacity: 0.6;
+  z-index: -1;
+  animation: twinkle 4s infinite alternate;
+}
+
+@keyframes twinkle {
+  0% {
+    opacity: 0.6;
+  }
+
+  100% {
+    opacity: 0.3;
+  }
 }
 
 * {
@@ -187,59 +236,60 @@ body {
 
 /* 夜间模式按钮特殊样式 */
 [data-theme="night"] .theme-toggle-btn {
-  background: rgba(49, 50, 68, 0.9);
-  border-color: rgba(205, 214, 244, 0.2);
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(232, 234, 237, 0.2);
 }
 
 [data-theme="night"] .theme-toggle-btn:hover {
-  background: rgba(69, 71, 90, 0.9);
+  background: rgba(255, 255, 255, 0.12);
   border-color: var(--highlight-color);
-  box-shadow: 0 4px 16px rgba(243, 139, 168, 0.2);
+  box-shadow: 0 4px 16px rgba(255, 167, 38, 0.2);
 }
 
 /* 夜间模式卡片和容器优化 */
 [data-theme="night"] #site-intro {
-  background: rgba(49, 50, 68, 0.6);
-  border: 1px solid rgba(205, 214, 244, 0.1);
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(232, 234, 237, 0.1);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
 }
 
 [data-theme="night"] .nav-link {
   border-radius: 10px;
+  color: var(--foreground-color);
 }
 
 [data-theme="night"] .nav-link.current {
-  background: rgba(69, 71, 90, 0.8);
-  box-shadow: 0 2px 8px rgba(243, 139, 168, 0.1);
+  background: rgba(255, 255, 255, 0.12);
+  box-shadow: 0 2px 8px rgba(255, 167, 38, 0.15);
 }
 
 [data-theme="night"] .search-form {
-  background: rgba(49, 50, 68, 0.8);
-  border-color: rgba(205, 214, 244, 0.15);
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(232, 234, 237, 0.15);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
 }
 
 [data-theme="night"] .search-form>input {
-  background: rgba(30, 30, 46, 0.6);
-  border-color: rgba(205, 214, 244, 0.2);
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(232, 234, 237, 0.2);
   color: var(--foreground-color);
 }
 
 [data-theme="night"] .search-form>input:focus {
   border-color: var(--highlight-color);
-  box-shadow: 0 0 0 2px rgba(243, 139, 168, 0.2);
+  box-shadow: 0 0 0 2px rgba(255, 167, 38, 0.3);
 }
 
 /* 夜间模式页面结构优化 */
 [data-theme="night"] #main-container {
-  border-color: rgba(205, 214, 244, 0.1);
+  border-color: rgba(232, 234, 237, 0.1);
 }
 
 [data-theme="night"] .header-avatar,
 [data-theme="night"] .breadcrumb-avatar {
-  border-color: rgba(205, 214, 244, 0.3);
+  border-color: rgba(232, 234, 237, 0.3);
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
 }
 
@@ -248,30 +298,30 @@ body {
 [data-theme="night"] .video-box video,
 [data-theme="night"] .audio-box audio,
 [data-theme="night"] .attachment-box img {
-  border-color: rgba(205, 214, 244, 0.2);
+  border-color: rgba(232, 234, 237, 0.2);
 }
 
 [data-theme="night"] .content pre {
-  background: rgba(30, 30, 46, 0.8);
-  border-color: rgba(205, 214, 244, 0.15);
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(232, 234, 237, 0.15);
 }
 
 /* 夜间模式特殊元素 */
 [data-theme="night"] hr {
   background: linear-gradient(90deg,
       transparent,
-      rgba(205, 214, 244, 0.3) 20%,
-      rgba(205, 214, 244, 0.3) 80%,
+      rgba(232, 234, 237, 0.3) 20%,
+      rgba(232, 234, 237, 0.3) 80%,
       transparent);
   border: none;
   height: 1px;
 }
 
 [data-theme="night"] #back-to-top {
-  background: rgba(49, 50, 68, 0.9);
+  background: rgba(255, 255, 255, 0.1);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
-  border: 1px solid rgba(205, 214, 244, 0.2);
+  border: 1px solid rgba(232, 234, 237, 0.2);
 }
 
 #wrapper {
@@ -1291,10 +1341,10 @@ li:has(input[type='checkbox']:checked:disabled)::before {
   /* 移动端夜间主题优化 */
   [data-theme="night"] #aside-container {
     box-shadow: 0px 4px 16px -16px rgba(0, 0, 0, 0.8);
-    background: rgba(30, 30, 46, 0.95);
+    background: rgba(17, 20, 45, 0.95);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
-    border-color: rgba(205, 214, 244, 0.1);
+    border-color: rgba(232, 234, 237, 0.1);
   }
 
   [data-theme="night"] .nav-link {
@@ -1303,7 +1353,7 @@ li:has(input[type='checkbox']:checked:disabled)::before {
   }
 
   [data-theme="night"] .nav-link:hover {
-    background-color: rgba(69, 71, 90, 0.6);
+    background-color: rgba(255, 255, 255, 0.08);
   }
 
   /* 移动端主题切换按钮优化 */
