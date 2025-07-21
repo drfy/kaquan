@@ -99,6 +99,12 @@ const navs = (getEnv(import.meta.env, Astro, 'NAVS') || '')
             document.body.setAttribute('data-theme', initialTheme);
           });
         }
+        
+        // 立即更新浏览器主题色
+        let themeColorMeta = document.querySelector('meta[name="theme-color"]');
+        if (themeColorMeta) {
+          themeColorMeta.content = isNight ? '#1e1e2e' : '#f4f1ec';
+        }
       })();
     </script>
     <SEO
@@ -162,6 +168,13 @@ const navs = (getEnv(import.meta.env, Astro, 'NAVS') || '')
                   </div>
                 ))
               }
+              <div class="nav-item">
+                <button id="theme-toggle" class="theme-toggle-btn" title="切换主题">
+                  <span class="theme-icon day-icon">☀️</span>
+                  <span class="theme-icon night-icon">🌙</span>
+                  <span class="toggle-text">主题</span>
+                </button>
+              </div>
             </div>
             <input class="search-icon" name="icon" type="checkbox" placeholder="🔍" />
             <form class="search-form" action={searchAction} method="get">
@@ -256,7 +269,7 @@ const navs = (getEnv(import.meta.env, Astro, 'NAVS') || '')
         updateThemeColor(isNight) {
           let themeColorMeta = document.querySelector('meta[name="theme-color"]');
           if (themeColorMeta) {
-            const themeColor = isNight ? '#0d1117' : '#f4f1ec';
+            const themeColor = isNight ? '#1e1e2e' : '#f4f1ec';
             themeColorMeta.content = themeColor;
           }
         }
@@ -266,21 +279,89 @@ const navs = (getEnv(import.meta.env, Astro, 'NAVS') || '')
             document.body.setAttribute('data-theme', theme);
             document.documentElement.setAttribute('data-theme', theme);
             this.updateThemeColor(theme === 'night');
+            
+            // 保存用户手动选择的主题偏好
+            localStorage.setItem('user-theme-preference', theme);
+            localStorage.setItem('theme-override-time', Date.now().toString());
           }
         }
 
         getCurrentTheme() {
           return document.body.getAttribute('data-theme') || 'day';
         }
+
+        toggleTheme() {
+          const currentTheme = this.getCurrentTheme();
+          const newTheme = currentTheme === 'day' ? 'night' : 'day';
+          this.setTheme(newTheme);
+          
+          // 触发自定义事件
+          document.dispatchEvent(new CustomEvent('themechange', {
+            detail: { theme: newTheme, isNight: newTheme === 'night', manual: true }
+          }));
+        }
+
+        // 检查是否应该应用用户偏好而不是时间
+        shouldUseUserPreference() {
+          const preference = localStorage.getItem('user-theme-preference');
+          const overrideTime = localStorage.getItem('theme-override-time');
+          
+          if (!preference || !overrideTime) return false;
+          
+          // 用户偏好有效期：2小时
+          const twoHours = 2 * 60 * 60 * 1000;
+          return (Date.now() - parseInt(overrideTime)) < twoHours;
+        }
+
+        // 修改应用主题的逻辑，考虑用户偏好
+        applyTimeBasedTheme() {
+          // 如果用户最近手动选择了主题，使用用户偏好
+          if (this.shouldUseUserPreference()) {
+            const userTheme = localStorage.getItem('user-theme-preference');
+            const currentTheme = document.body.getAttribute('data-theme');
+            
+            if (currentTheme !== userTheme) {
+              document.body.setAttribute('data-theme', userTheme);
+              document.documentElement.setAttribute('data-theme', userTheme);
+              this.updateThemeColor(userTheme === 'night');
+            }
+            return;
+          }
+          
+          // 否则使用基于时间的自动切换
+          const isNight = this.isNightTime();
+          const currentTheme = document.body.getAttribute('data-theme');
+          const newTheme = isNight ? 'night' : 'day';
+          
+          if (currentTheme !== newTheme) {
+            document.body.setAttribute('data-theme', newTheme);
+            document.documentElement.setAttribute('data-theme', newTheme);
+            this.updateThemeColor(isNight);
+            
+            document.dispatchEvent(new CustomEvent('themechange', {
+              detail: { theme: newTheme, isNight, manual: false }
+            }));
+          }
+        }
       }
 
-      // 初始化主题切换器
-      if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', () => {
-          window.themeSwitcher = new ThemeSwitcher();
-        });
-      } else {
+      // 初始化主题切换器和按钮事件
+      function initTheme() {
         window.themeSwitcher = new ThemeSwitcher();
+        
+        // 绑定按钮点击事件
+        const toggleButton = document.getElementById('theme-toggle');
+        if (toggleButton) {
+          toggleButton.addEventListener('click', () => {
+            window.themeSwitcher.toggleTheme();
+          });
+        }
+      }
+
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initTheme);
+      } else {
+        initTheme();
       }
     </script>
     <Fragment set:html={FOOTER_INJECT} />

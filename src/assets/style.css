@@ -3,38 +3,39 @@
   --background-color: #f4f1ec;
   --foreground-color: #000000;
   --highlight-color: orangered;
-  --box-border-radius: 3px;
-  --media-border-radius: 8px;
+  --box-border-radius: 12px;
+  --media-border-radius: 16px;
   --dot-size: 8px;
-  --shadows: 0 1px 3px rgba(0, 0, 0, 0.08), 0 2px 6px rgba(0, 0, 0, 0.06),
-    0 4px 12px rgba(0, 0, 0, 0.04);
-  --shadows-hover: 0 2px 6px rgba(0, 0, 0, 0.12), 0 4px 12px rgba(0, 0, 0, 0.08),
-    0 8px 24px rgba(0, 0, 0, 0.06);
+  --shadows: 0 2px 8px rgba(0, 0, 0, 0.06), 0 4px 16px rgba(0, 0, 0, 0.04),
+    0 8px 32px rgba(0, 0, 0, 0.02);
+  --shadows-hover: 0 4px 16px rgba(0, 0, 0, 0.08), 0 8px 32px rgba(0, 0, 0, 0.06),
+    0 16px 64px rgba(0, 0, 0, 0.04);
   --box-margin: 10px;
-  --border-color: rgba(0, 0, 0, 0.05);
+  --border-color: rgba(0, 0, 0, 0.08);
   --link-color: var(--highlight-color);
   --icon-hover-filter: invert(51%) sepia(0%) saturate(0%) hue-rotate(23deg) brightness(90%) contrast(90%);
   --icon-secondary-filter: invert(97%) sepia(0%) saturate(0%) hue-rotate(129deg) brightness(86%) contrast(88%);
-  --cell-background-color: #fff;
-  --code-background-color: #f9f9f9;
+  --cell-background-color: rgba(255, 255, 255, 0.9);
+  --code-background-color: rgba(249, 249, 249, 0.8);
   --secondary-color: #999;
 }
 
-/* 夜间主题变量 */
+/* 夜间主题变量 - 现代深色主题 */
 [data-theme="night"] {
-  --background-color: #0d1117;
-  --foreground-color: #e6edf3;
-  --highlight-color: #ff6b35;
-  --shadows: 0 1px 3px rgba(0, 0, 0, 0.3), 0 2px 6px rgba(0, 0, 0, 0.25),
-    0 4px 12px rgba(0, 0, 0, 0.2);
-  --shadows-hover: 0 2px 6px rgba(0, 0, 0, 0.4), 0 4px 12px rgba(0, 0, 0, 0.35),
-    0 8px 24px rgba(0, 0, 0, 0.3);
-  --border-color: rgba(255, 255, 255, 0.1);
-  --icon-hover-filter: invert(69%) sepia(0%) saturate(0%) hue-rotate(93deg) brightness(90%) contrast(85%);
-  --icon-secondary-filter: invert(45%) sepia(8%) saturate(629%) hue-rotate(186deg) brightness(93%) contrast(88%);
-  --cell-background-color: #21262d;
-  --code-background-color: #161b22;
-  --secondary-color: #8b949e;
+  --background-color: linear-gradient(135deg, #1e1e2e 0%, #2a2a3a 50%, #1a1a28 100%);
+  --background-solid: #1e1e2e;
+  --foreground-color: #cdd6f4;
+  --highlight-color: #f38ba8;
+  --shadows: 0 2px 8px rgba(0, 0, 0, 0.4), 0 4px 16px rgba(0, 0, 0, 0.3),
+    0 8px 32px rgba(0, 0, 0, 0.2);
+  --shadows-hover: 0 4px 16px rgba(0, 0, 0, 0.5), 0 8px 32px rgba(0, 0, 0, 0.4),
+    0 16px 64px rgba(0, 0, 0, 0.3);
+  --border-color: rgba(205, 214, 244, 0.12);
+  --icon-hover-filter: invert(89%) sepia(6%) saturate(1629%) hue-rotate(200deg) brightness(99%) contrast(89%);
+  --icon-secondary-filter: invert(59%) sepia(12%) saturate(1058%) hue-rotate(200deg) brightness(96%) contrast(91%);
+  --cell-background-color: rgba(49, 50, 68, 0.8);
+  --code-background-color: rgba(30, 30, 46, 0.6);
+  --secondary-color: #a6adc8;
 }
 
 /* 平滑主题切换动画 */
@@ -56,7 +57,14 @@ body {
     Segoe UI Emoji,
     Segoe UI Symbol,
     Noto Color Emoji;
-  transition: background-color 0.3s ease, color 0.3s ease;
+  transition: background 0.4s ease, color 0.3s ease;
+}
+
+/* 夜间模式特殊背景处理 */
+[data-theme="night"] body {
+  background: linear-gradient(135deg, #1e1e2e 0%, #2a2a3a 50%, #1a1a28 100%);
+  background-attachment: fixed;
+  min-height: 100vh;
 }
 
 * {
@@ -112,6 +120,158 @@ body {
 [data-theme="night"] video {
   opacity: 0.9;
   filter: brightness(0.8) contrast(1.1);
+}
+
+/* 主题切换按钮样式 */
+.theme-toggle-btn {
+  width: 100%;
+  background: var(--cell-background-color);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 8px 12px;
+  color: var(--foreground-color);
+  font-size: 14px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.theme-toggle-btn:hover {
+  background: var(--code-background-color);
+  border-color: var(--highlight-color);
+  transform: translateY(-1px);
+  box-shadow: var(--shadows-hover);
+}
+
+.theme-icon {
+  font-size: 16px;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.toggle-text {
+  font-weight: 500;
+  flex: 1;
+  text-align: left;
+}
+
+/* 白天模式 - 显示太阳，隐藏月亮 */
+[data-theme="day"] .day-icon {
+  opacity: 1;
+  transform: scale(1) rotate(0deg);
+}
+
+[data-theme="day"] .night-icon {
+  opacity: 0;
+  transform: scale(0.8) rotate(-180deg);
+  position: absolute;
+  left: 0;
+}
+
+/* 夜间模式 - 显示月亮，隐藏太阳 */
+[data-theme="night"] .day-icon {
+  opacity: 0;
+  transform: scale(0.8) rotate(180deg);
+  position: absolute;
+  left: 0;
+}
+
+[data-theme="night"] .night-icon {
+  opacity: 1;
+  transform: scale(1) rotate(0deg);
+}
+
+/* 夜间模式按钮特殊样式 */
+[data-theme="night"] .theme-toggle-btn {
+  background: rgba(49, 50, 68, 0.9);
+  border-color: rgba(205, 214, 244, 0.2);
+}
+
+[data-theme="night"] .theme-toggle-btn:hover {
+  background: rgba(69, 71, 90, 0.9);
+  border-color: var(--highlight-color);
+  box-shadow: 0 4px 16px rgba(243, 139, 168, 0.2);
+}
+
+/* 夜间模式卡片和容器优化 */
+[data-theme="night"] #site-intro {
+  background: rgba(49, 50, 68, 0.6);
+  border: 1px solid rgba(205, 214, 244, 0.1);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+[data-theme="night"] .nav-link {
+  border-radius: 10px;
+}
+
+[data-theme="night"] .nav-link.current {
+  background: rgba(69, 71, 90, 0.8);
+  box-shadow: 0 2px 8px rgba(243, 139, 168, 0.1);
+}
+
+[data-theme="night"] .search-form {
+  background: rgba(49, 50, 68, 0.8);
+  border-color: rgba(205, 214, 244, 0.15);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+[data-theme="night"] .search-form>input {
+  background: rgba(30, 30, 46, 0.6);
+  border-color: rgba(205, 214, 244, 0.2);
+  color: var(--foreground-color);
+}
+
+[data-theme="night"] .search-form>input:focus {
+  border-color: var(--highlight-color);
+  box-shadow: 0 0 0 2px rgba(243, 139, 168, 0.2);
+}
+
+/* 夜间模式页面结构优化 */
+[data-theme="night"] #main-container {
+  border-color: rgba(205, 214, 244, 0.1);
+}
+
+[data-theme="night"] .header-avatar,
+[data-theme="night"] .breadcrumb-avatar {
+  border-color: rgba(205, 214, 244, 0.3);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+}
+
+/* 夜间模式内容区域优化 */
+[data-theme="night"] .image-box>img,
+[data-theme="night"] .video-box video,
+[data-theme="night"] .audio-box audio,
+[data-theme="night"] .attachment-box img {
+  border-color: rgba(205, 214, 244, 0.2);
+}
+
+[data-theme="night"] .content pre {
+  background: rgba(30, 30, 46, 0.8);
+  border-color: rgba(205, 214, 244, 0.15);
+}
+
+/* 夜间模式特殊元素 */
+[data-theme="night"] hr {
+  background: linear-gradient(90deg,
+      transparent,
+      rgba(205, 214, 244, 0.3) 20%,
+      rgba(205, 214, 244, 0.3) 80%,
+      transparent);
+  border: none;
+  height: 1px;
+}
+
+[data-theme="night"] #back-to-top {
+  background: rgba(49, 50, 68, 0.9);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(205, 214, 244, 0.2);
 }
 
 #wrapper {
@@ -1131,13 +1291,33 @@ li:has(input[type='checkbox']:checked:disabled)::before {
   /* 移动端夜间主题优化 */
   [data-theme="night"] #aside-container {
     box-shadow: 0px 4px 16px -16px rgba(0, 0, 0, 0.8);
+    background: rgba(30, 30, 46, 0.95);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-color: rgba(205, 214, 244, 0.1);
   }
 
   [data-theme="night"] .nav-link {
     color: var(--foreground-color);
+    border-radius: 8px;
   }
 
   [data-theme="night"] .nav-link:hover {
-    background-color: rgba(255, 255, 255, 0.1);
+    background-color: rgba(69, 71, 90, 0.6);
+  }
+
+  /* 移动端主题切换按钮优化 */
+  .theme-toggle-btn {
+    font-size: 13px;
+    padding: 6px 10px;
+    border-radius: 6px;
+  }
+
+  .theme-icon {
+    font-size: 14px;
+  }
+
+  .toggle-text {
+    font-size: 12px;
   }
 }
