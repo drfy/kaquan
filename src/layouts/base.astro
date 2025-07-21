@@ -72,8 +72,8 @@ const navs = (getEnv(import.meta.env, Astro, 'NAVS') || '')
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#ffffff" />
-    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#1a1a1a" />
+    <meta name="theme-color" content="#f4f1ec" />
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0c0c0f" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
     <link rel="alternate" type="application/rss+xml" title={`${RSS_PREFIX}${channel?.title}`} href={RSS_URL} />
     <style is:inline>
@@ -105,7 +105,7 @@ const navs = (getEnv(import.meta.env, Astro, 'NAVS') || '')
         // 立即更新浏览器主题色
         let themeColorMeta = document.querySelector('meta[name="theme-color"]');
         if (themeColorMeta) {
-          themeColorMeta.content = isNight ? '#1a1a1a' : '#ffffff';
+          themeColorMeta.content = isNight ? '#0c0c0f' : '#f4f1ec';
         }
       })();
     </script>
@@ -271,7 +271,7 @@ const navs = (getEnv(import.meta.env, Astro, 'NAVS') || '')
         updateThemeColor(isNight) {
           let themeColorMeta = document.querySelector('meta[name="theme-color"]');
           if (themeColorMeta) {
-            const themeColor = isNight ? '#1a1a1a' : '#ffffff';
+            const themeColor = isNight ? '#0c0c0f' : '#f4f1ec';
             themeColorMeta.content = themeColor;
             
             // 更新苹果设备状态栏样式
