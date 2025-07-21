@@ -72,7 +72,7 @@ const navs = (getEnv(import.meta.env, Astro, 'NAVS') || '')
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#f4f1ec" />
+    <meta name="theme-color" content="#f0f4f8" />
     <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0c0c0f" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
     <link rel="alternate" type="application/rss+xml" title={`${RSS_PREFIX}${channel?.title}`} href={RSS_URL} />
@@ -115,7 +115,7 @@ const navs = (getEnv(import.meta.env, Astro, 'NAVS') || '')
         // 立即更新浏览器主题色
         let themeColorMeta = document.querySelector('meta[name="theme-color"]');
         if (themeColorMeta) {
-          themeColorMeta.content = isNight ? '#0c0c0f' : '#f4f1ec';
+          themeColorMeta.content = isNight ? '#0c0c0f' : '#f0f4f8';
         }
         
         // 延迟更长时间再启用过渡
@@ -319,7 +319,7 @@ const navs = (getEnv(import.meta.env, Astro, 'NAVS') || '')
         updateThemeColor(isNight) {
           let themeColorMeta = document.querySelector('meta[name="theme-color"]');
           if (themeColorMeta) {
-            const themeColor = isNight ? '#0c0c0f' : '#f4f1ec';
+            const themeColor = isNight ? '#0c0c0f' : '#f0f4f8';
             themeColorMeta.content = themeColor;
             
             // 更新苹果设备状态栏样式
@@ -332,28 +332,28 @@ const navs = (getEnv(import.meta.env, Astro, 'NAVS') || '')
 
         setTheme(theme) {
           if (['day', 'night'].includes(theme)) {
-            // 临时禁用过渡避免闪烁
-            const disableStyle = document.createElement('style');
-            disableStyle.innerHTML = '* { transition: none !important; }';
-            disableStyle.id = 'temp-disable-transitions';
-            document.head.appendChild(disableStyle);
+            // 添加淡入淡出效果
+            document.body.style.opacity = '0.7';
+            document.body.style.transition = 'opacity 0.3s ease-out';
             
-            document.body.setAttribute('data-theme', theme);
-            document.documentElement.setAttribute('data-theme', theme);
-            this.updateThemeColor(theme === 'night');
-            this.updateThemeText(theme);
-            
-            // 保存用户手动选择的主题偏好
-            localStorage.setItem('user-theme-preference', theme);
-            localStorage.setItem('theme-override-time', Date.now().toString());
-            
-            // 短暂延迟后重新启用过渡
             setTimeout(() => {
-              const tempStyle = document.getElementById('temp-disable-transitions');
-              if (tempStyle) {
-                tempStyle.remove();
-              }
-            }, 100);
+              document.body.setAttribute('data-theme', theme);
+              document.documentElement.setAttribute('data-theme', theme);
+              this.updateThemeColor(theme === 'night');
+              this.updateThemeText(theme);
+              
+              // 保存用户手动选择的主题偏好
+              localStorage.setItem('user-theme-preference', theme);
+              localStorage.setItem('theme-override-time', Date.now().toString());
+              
+              // 淡入回来
+              setTimeout(() => {
+                document.body.style.opacity = '1';
+                setTimeout(() => {
+                  document.body.style.transition = '';
+                }, 300);
+              }, 50);
+            }, 150);
           }
         }
 
@@ -430,6 +430,9 @@ const navs = (getEnv(import.meta.env, Astro, 'NAVS') || '')
             // 防止快速连击
             if (toggleButton.dataset.clicking === 'true') return;
             toggleButton.dataset.clicking = 'true';
+            
+            // 立即失焦，移除focus框线
+            toggleButton.blur();
             
             window.themeSwitcher.toggleTheme();
             

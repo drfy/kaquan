@@ -1,23 +1,23 @@
 :root {
-  /* 日间主题变量 (保持现有) */
-  --background-color: #f4f1ec;
-  --foreground-color: #000000;
-  --highlight-color: orangered;
+  /* 日间主题变量 - 柔和护眼版 */
+  --background-color: linear-gradient(135deg, #f0f4f8 0%, #e8f2f7 25%, #f4f8fb 50%, #e9f3f8 75%, #f2f6fa 100%);
+  --foreground-color: #2d3748;
+  --highlight-color: #3182ce;
   --box-border-radius: 12px;
   --media-border-radius: 16px;
   --dot-size: 8px;
-  --shadows: 0 2px 8px rgba(0, 0, 0, 0.06), 0 4px 16px rgba(0, 0, 0, 0.04),
-    0 8px 32px rgba(0, 0, 0, 0.02);
-  --shadows-hover: 0 4px 16px rgba(0, 0, 0, 0.08), 0 8px 32px rgba(0, 0, 0, 0.06),
-    0 16px 64px rgba(0, 0, 0, 0.04);
+  --shadows: 0 2px 8px rgba(99, 179, 237, 0.08), 0 4px 16px rgba(99, 179, 237, 0.05),
+    0 8px 32px rgba(99, 179, 237, 0.03);
+  --shadows-hover: 0 4px 16px rgba(99, 179, 237, 0.12), 0 8px 32px rgba(99, 179, 237, 0.08),
+    0 16px 64px rgba(99, 179, 237, 0.05);
   --box-margin: 10px;
-  --border-color: rgba(0, 0, 0, 0.08);
+  --border-color: rgba(99, 179, 237, 0.15);
   --link-color: var(--highlight-color);
-  --icon-hover-filter: invert(51%) sepia(0%) saturate(0%) hue-rotate(23deg) brightness(90%) contrast(90%);
-  --icon-secondary-filter: invert(97%) sepia(0%) saturate(0%) hue-rotate(129deg) brightness(86%) contrast(88%);
-  --cell-background-color: rgba(255, 255, 255, 0.9);
-  --code-background-color: rgba(249, 249, 249, 0.8);
-  --secondary-color: #999;
+  --icon-hover-filter: invert(11%) sepia(8%) saturate(2912%) hue-rotate(203deg) brightness(97%) contrast(94%);
+  --icon-secondary-filter: invert(39%) sepia(21%) saturate(1686%) hue-rotate(204deg) brightness(94%) contrast(87%);
+  --cell-background-color: rgba(255, 255, 255, 0.75);
+  --code-background-color: rgba(237, 245, 251, 0.8);
+  --secondary-color: #4a5568;
 }
 
 /* 夜间主题变量 - 现代深色主题 */
@@ -81,6 +81,31 @@ body {
 
 /* 夜间主题动态背景动画 */
 @keyframes gradientShift {
+  0% {
+    background-position: 0% 50%;
+  }
+
+  50% {
+    background-position: 100% 50%;
+  }
+
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+/* 白天模式背景处理 - 柔和护眼版 */
+body {
+  background: var(--background-color);
+  background-attachment: fixed;
+  background-size: 400% 400%;
+  animation: dayGradientShift 20s ease infinite;
+  min-height: 100vh;
+  color: var(--foreground-color);
+}
+
+/* 白天主题动态背景动画 - 更温和 */
+@keyframes dayGradientShift {
   0% {
     background-position: 0% 50%;
   }
@@ -227,6 +252,8 @@ body {
   overflow: hidden;
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
+  outline: none;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .theme-toggle-btn:hover {
@@ -242,7 +269,7 @@ body {
 
 .theme-toggle-btn:focus {
   outline: none;
-  box-shadow: 0 0 0 2px rgba(79, 195, 247, 0.3);
+  box-shadow: none;
 }
 
 .theme-icon {
