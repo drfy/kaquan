@@ -38,7 +38,7 @@
   --secondary-color: #b8c5d1;
 }
 
-/* 平滑主题切换动画 */
+/* 平滑主题切换动画 - 优化版 */
 body {
   background-color: var(--background-color);
   color: var(--foreground-color);
@@ -57,16 +57,16 @@ body {
     Segoe UI Emoji,
     Segoe UI Symbol,
     Noto Color Emoji;
-  transition: background-color 0.3s ease, color 0.3s ease;
+  transition: background-color 0.2s ease-out, color 0.2s ease-out;
 }
 
-/* 优化的通用过渡效果 */
+/* 更温和的通用过渡效果 */
 * {
-  transition: background-color 0.3s ease,
-    color 0.3s ease,
-    border-color 0.3s ease,
-    box-shadow 0.3s ease,
-    backdrop-filter 0.2s ease;
+  transition: background-color 0.2s ease-out,
+    color 0.2s ease-out,
+    border-color 0.2s ease-out,
+    box-shadow 0.25s ease-out,
+    backdrop-filter 0.15s ease-out;
 }
 
 /* 夜间模式特殊背景处理 - MyIP风格 */
@@ -207,7 +207,7 @@ body {
   filter: brightness(0.8) contrast(1.1);
 }
 
-/* 主题切换按钮优化 */
+/* 主题切换按钮 - 减少动画复杂度 */
 .theme-toggle-btn {
   width: 100%;
   background: var(--cell-background-color);
@@ -220,24 +220,24 @@ body {
   display: flex;
   align-items: center;
   gap: 10px;
-  transition: all 0.2s ease;
+  transition: transform 0.15s ease-out,
+    background-color 0.2s ease-out,
+    border-color 0.2s ease-out;
   position: relative;
   overflow: hidden;
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
-  will-change: transform, background-color;
 }
 
 .theme-toggle-btn:hover {
   background: var(--code-background-color);
   border-color: var(--highlight-color);
   transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
 .theme-toggle-btn:active {
-  transform: translateY(0) scale(0.98);
-  transition: all 0.1s ease;
+  transform: translateY(0);
+  transition: transform 0.05s ease-out;
 }
 
 .theme-toggle-btn:focus {

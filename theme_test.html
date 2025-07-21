@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>主题切换测试</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        padding: 20px;
+        transition: background-color 0.2s ease-out, color 0.2s ease-out;
+      }
+
+      [data-theme="day"] {
+        background: #f4f1ec;
+        color: #000;
+      }
+
+      [data-theme="night"] {
+        background: linear-gradient(
+          135deg,
+          #0c0c0f 0%,
+          #1a1a2e 25%,
+          #16213e 50%,
+          #0f3460 75%,
+          #0e3460 100%
+        );
+        color: #e1e5f2;
+      }
+
+      .theme-toggle-btn {
+        background: rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 8px;
+        padding: 10px 20px;
+        cursor: pointer;
+        color: inherit;
+      }
+
+      .controls {
+        margin: 20px 0;
+      }
+
+      .status {
+        margin: 10px 0;
+        font-weight: bold;
+      }
+    </style>
+  </head>
+  <body data-theme="day">
+    <h1>主题切换功能测试</h1>
+
+    <div class="controls">
+      <button id="theme-toggle" class="theme-toggle-btn">
+        <span id="theme-text">主题</span>
+      </button>
+    </div>
+
+    <div class="status">当前主题: <span id="current-theme">day</span></div>
+
+    <div>
+      <p>这是一段测试文字，用来检验主题切换的效果。</p>
+      <p>在夜间模式下，文字应该是浅色，背景是深色渐变。</p>
+      <p>在白天模式下，文字应该是深色，背景是浅色。</p>
+    </div>
+
+    <script>
+      // 复制主要的主题切换逻辑
+      class ThemeSwitcher {
+        updateThemeText(theme) {
+          const themeText = document.getElementById("theme-text");
+          const currentThemeSpan = document.getElementById("current-theme");
+          if (themeText) {
+            const newText = theme === "night" ? "夜晚" : "白天";
+            themeText.textContent = newText;
+            console.log("主题文本已更新为:", newText);
+          }
+          if (currentThemeSpan) {
+            currentThemeSpan.textContent = theme;
+          }
+        }
+
+        setTheme(theme) {
+          document.body.setAttribute("data-theme", theme);
+          this.updateThemeText(theme);
+        }
+
+        getCurrentTheme() {
+          return document.body.getAttribute("data-theme") || "day";
+        }
+
+        toggleTheme() {
+          const currentTheme = this.getCurrentTheme();
+          const newTheme = currentTheme === "day" ? "night" : "day";
+          console.log("切换主题从", currentTheme, "到", newTheme);
+          this.setTheme(newTheme);
+        }
+      }
+
+      // 初始化
+      const themeSwitcher = new ThemeSwitcher();
+
+      // 设置初始文本
+      const initialTheme = document.body.getAttribute("data-theme");
+      themeSwitcher.updateThemeText(initialTheme);
+
+      // 绑定按钮事件
+      document.getElementById("theme-toggle").addEventListener("click", () => {
+        themeSwitcher.toggleTheme();
+      });
+    </script>
+  </body>
+</html>
