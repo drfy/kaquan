@@ -61,7 +61,7 @@ html {
 @media screen and (max-width: 600px) {
   .search-icon {
     position: absolute;
-    top: 70px; /* 调整到第二行位置 */
+    top: 78px; /* 调整到与主题按钮对齐的位置 */
     left: calc(50% + 45px); /* 在主题按钮右侧，适当间距 */
     width: 32px;
     height: 32px;
