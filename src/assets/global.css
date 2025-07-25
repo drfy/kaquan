@@ -134,6 +134,8 @@ html {
     padding: 8px 12px;
     font-size: 13px;
     min-height: 36px;
+    flex: 0 0 auto; /* 确保按钮不被压缩 */
+    min-width: fit-content; /* 确保按钮有足够宽度 */
   }
 
   .theme-icon {
@@ -165,15 +167,25 @@ html {
     }
 
     .theme-toggle-btn {
-      padding: 6px 10px;
-      font-size: 12px;
-      min-height: 32px;
+      padding: 6px 8px;
+      font-size: 11px;
+      min-height: 30px;
     }
 
     .theme-icon {
       font-size: 14px;
       width: 16px;
       height: 16px;
+    }
+
+    /* 超小屏幕导航项优化 */
+    #aside-container .nav-item .nav-link {
+      padding: 6px 4px;
+      font-size: 12px;
+    }
+
+    #aside-container .nav {
+      gap: 2px; /* 减少间距以节省空间 */
     }
   }
 }
