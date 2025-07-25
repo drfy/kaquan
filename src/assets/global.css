@@ -62,7 +62,7 @@ html {
   .search-icon {
     position: absolute;
     top: 85px; /* 与主题按钮对齐 */
-    left: calc(50% + 100px); /* 大幅增加左边距，确保不重叠 */
+    right: 20px; /* 改用右边定位，距离右边缘20px */
     width: 32px;
     height: 32px;
     cursor: pointer;
@@ -148,8 +148,7 @@ html {
   /* 大屏移动设备优化 (iPhone 13 Pro Max等) */
   @media screen and (max-width: 600px) and (min-width: 390px) and (min-height: 800px) {
     .search-icon {
-      left: 0;
-      /* 重置定位，使用flex布局控制间距 */
+      right: 30px; /* 大屏设备距离右边缘更远一些 */
       width: 36px;
       height: 36px;
 
@@ -186,8 +185,8 @@ html {
     .search-icon {
       top: 55px;
       /* 超小屏幕调整位置 */
-      left: calc(50% + 50px);
-      /* 超小屏幕也保持与主题按钮的适当间距 */
+      right: 15px;
+      /* 超小屏幕距离右边缘15px */
       width: 28px;
       height: 28px;
 
