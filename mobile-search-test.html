@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>移动端搜索图标测试</title>
+    <style>
+        /* 简化的测试样式 */
+        :root {
+            --background-color: #f0f4f8;
+            --foreground-color: #2d3748;
+            --highlight-color: #3182ce;
+            --border-color: rgba(99, 179, 237, 0.15);
+            --cell-background-color: rgba(255, 255, 255, 0.75);
+            --code-background-color: rgba(237, 245, 251, 0.8);
+            --secondary-color: #4a5568;
+            --shadows: 0 2px 8px rgba(99, 179, 237, 0.08);
+        }
+
+        [data-theme="night"] {
+            --background-color: #0c0c0f;
+            --foreground-color: #e1e5f2;
+            --highlight-color: #4fc3f7;
+            --border-color: rgba(225, 229, 242, 0.12);
+            --cell-background-color: rgba(26, 26, 46, 0.85);
+            --code-background-color: rgba(12, 12, 15, 0.8);
+            --secondary-color: #b8c5d1;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            background: var(--background-color);
+            color: var(--foreground-color);
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .nav-demo {
+            background: var(--cell-background-color);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 20px;
+            position: relative;
+            min-height: 100px;
+        }
+
+        .nav-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+
+        .nav-btn {
+            background: var(--code-background-color);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 8px 16px;
+            color: var(--foreground-color);
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .search-icon {
+            position: absolute;
+            top: 60px;
+            right: 8px;
+            width: 32px;
+            height: 32px;
+            appearance: none;
+            outline: none;
+            cursor: pointer;
+            z-index: 10;
+        }
+
+        .search-icon:after {
+            content: '🔍';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: var(--cell-background-color);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            transition: all 0.2s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .search-icon:hover:after {
+            background-color: var(--code-background-color);
+            transform: scale(1.1);
+            border-color: var(--highlight-color);
+        }
+
+        .search-icon:checked:after {
+            background-color: var(--highlight-color);
+            color: white;
+            border-color: var(--highlight-color);
+            transform: rotate(90deg);
+        }
+
+        .search-form {
+            display: none;
+            position: absolute;
+            top: 100px;
+            right: 8px;
+            left: 8px;
+            background: var(--cell-background-color);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 12px;
+            z-index: 20;
+        }
+
+        .search-icon:checked + .search-form {
+            display: block;
+            animation: slideDown 0.2s ease-out;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 8px 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            background: var(--cell-background-color);
+            color: var(--foreground-color);
+            font-size: 14px;
+            outline: none;
+            box-sizing: border-box;
+        }
+
+        .search-input:focus {
+            border-color: var(--highlight-color);
+            box-shadow: 0 0 0 2px rgba(49, 130, 206, 0.1);
+        }
+
+        .theme-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: var(--cell-background-color);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 8px 12px;
+            cursor: pointer;
+            font-size: 14px;
+            color: var(--foreground-color);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>移动端搜索图标测试</h1>
+        <p>请在移动端或缩小浏览器窗口查看效果</p>
+        
+        <div class="nav-demo">
+            <div class="nav-buttons">
+                <a href="#" class="nav-btn">Home</a>
+                <a href="#" class="nav-btn">省份直达</a>
+                <a href="#" class="nav-btn">外部链接</a>
+                <a href="#" class="nav-btn">神卡合集</a>
+            </div>
+            
+            <div class="nav-buttons">
+                <a href="#" class="nav-btn">交流大厅</a>
+                <a href="#" class="nav-btn">🌙 夜晚</a>
+            </div>
+            
+            <input class="search-icon" type="checkbox" />
+            <form class="search-form">
+                <input type="text" class="search-input" placeholder="🔍 搜索..." />
+            </form>
+        </div>
+        
+        <h2>功能说明</h2>
+        <ul>
+            <li>搜索图标位于第二行最右边</li>
+            <li>图标大小为32px，与主题按钮emoji大小匹配</li>
+            <li>点击图标展开搜索表单</li>
+            <li>激活时图标会旋转90度</li>
+            <li>支持日间/夜间主题</li>
+        </ul>
+    </div>
+    
+    <button class="theme-toggle" onclick="toggleTheme()">切换主题</button>
+    
+    <script>
+        function toggleTheme() {
+            const body = document.body;
+            const currentTheme = body.getAttribute('data-theme');
+            const newTheme = currentTheme === 'night' ? 'day' : 'night';
+            body.setAttribute('data-theme', newTheme);
+        }
+    </script>
+</body>
+</html>
