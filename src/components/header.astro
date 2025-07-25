@@ -39,6 +39,14 @@ const staticProxy = getEnv(import.meta.env, Astro, 'STATIC_PROXY') ?? '/static/'
       {channel?.title}
     </a>
   </div>
+  <div class="header-second-row">
+    <button id="theme-toggle" class="theme-toggle-btn" title="切换主题">
+      <span class="theme-icon day-icon">☀️</span>
+      <span class="theme-icon night-icon">🌙</span>
+      <span class="toggle-text" id="theme-text">主题</span>
+    </button>
+    <input class="search-icon-mobile" name="icon" type="checkbox" placeholder="🔍" />
+  </div>
   <div class="header-icons">
     {
       RSS_ENABLED && (
