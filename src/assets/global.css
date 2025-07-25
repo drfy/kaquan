@@ -145,7 +145,7 @@ html {
   /* 大屏移动设备优化 (iPhone 13 Pro Max等) */
   @media screen and (max-width: 600px) and (min-width: 390px) and (min-height: 800px) {
     .search-icon {
-      left: calc(50% + 85px); /* 大屏设备增加更多间距 */
+      left: calc(50% + 105px); /* 大屏设备增加更多间距 */
       width: 36px;
       height: 36px;
 
