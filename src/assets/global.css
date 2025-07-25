@@ -182,14 +182,6 @@ html {
   }
 }
 
-@media screen and (max-width: 599px) {
-
-  /* 移动端隐藏原有绝对定位的搜索icon，避免与新布局冲突 */
-  .search-icon {
-    display: none !important;
-  }
-}
-
 #back-to-top {
   display: none;
   position: fixed;
