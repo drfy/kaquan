@@ -62,7 +62,7 @@ html {
   .search-icon {
     position: absolute;
     top: 85px; /* 调整到与主题按钮对齐的位置 */
-    left: calc(50% + 65px); /* 增加与主题按钮的间距，避免排版错乱 */
+    left: calc(50% + 75px); /* 进一步增加间距，适配大屏设备 */
     width: 32px;
     height: 32px;
     cursor: pointer;
@@ -140,6 +140,40 @@ html {
     font-size: 16px;
     width: 18px;
     height: 18px;
+  }
+
+  /* 大屏移动设备优化 (iPhone 13 Pro Max等) */
+  @media screen and (max-width: 600px) and (min-width: 390px) and (min-height: 800px) {
+    .search-icon {
+      left: calc(50% + 85px); /* 大屏设备增加更多间距 */
+      width: 36px;
+      height: 36px;
+
+      &:after {
+        font-size: 22px;
+        line-height: 36px;
+        border-radius: 10px;
+      }
+    }
+
+    .search-form {
+      top: 125px; /* 相应调整搜索表单位置 */
+      right: 12px;
+      left: 12px;
+    }
+
+    .theme-toggle-btn {
+      padding: 10px 16px;
+      font-size: 14px;
+      min-height: 40px;
+      border-radius: 14px;
+    }
+
+    .theme-icon {
+      font-size: 18px;
+      width: 20px;
+      height: 20px;
+    }
   }
 
   /* 超小屏幕优化 */
