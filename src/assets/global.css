@@ -60,11 +60,9 @@ html {
 /* 移动端搜索图标优化 */
 @media screen and (max-width: 600px) {
   .search-icon {
-    position: relative;
-    top: 0;
-    /* 重置定位，让flex布局控制间距 */
-    left: 0;
-    /* 重置定位，让flex布局控制间距 */
+    position: absolute;
+    top: 85px; /* 与主题按钮对齐 */
+    left: calc(50% + 100px); /* 大幅增加左边距，确保不重叠 */
     width: 32px;
     height: 32px;
     cursor: pointer;
