@@ -1496,6 +1496,40 @@ li:has(input[type='checkbox']:checked:disabled)::before {
     /* 移除margin，使用gap */
   }
 
+  /* 窄屏下主题按钮优化 */
+  @media screen and (max-width: 390px) {
+    .theme-toggle-btn {
+      max-width: 100px;
+      /* 减少按钮宽度 */
+      font-size: 12px;
+      /* 减小字体 */
+      padding: 6px 10px;
+      /* 减少内边距 */
+    }
+
+    #aside-container .nav-item.theme-toggle-item {
+      gap: 10px;
+      /* 减少两个按钮之间的间距 */
+    }
+  }
+
+  /* 极窄屏幕优化 */
+  @media screen and (max-width: 320px) {
+    .theme-toggle-btn {
+      max-width: 85px;
+      /* 进一步减少按钮宽度 */
+      font-size: 11px;
+      /* 更小字体 */
+      padding: 5px 8px;
+      /* 更少内边距 */
+    }
+
+    #aside-container .nav-item.theme-toggle-item {
+      gap: 8px;
+      /* 最小间距 */
+    }
+  }
+
   .section-title {
     padding: 10px 0px 0px 0px;
   }

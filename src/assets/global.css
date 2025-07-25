@@ -142,10 +142,24 @@ html {
     height: 18px;
   }
 
-  /* 中等手机屏幕优化 */
-  @media screen and (max-width: 480px) and (min-width: 361px) {
+  /* 窄屏手机优化 - 390px及以下 */
+  @media screen and (max-width: 390px) {
     .search-icon {
-      left: calc(50% + 70px); /* 中等屏幕调整间距 */
+      left: calc(50% + 50px); /* 减少间距避免重叠 */
+      width: 30px; /* 稍微减小搜索图标尺寸 */
+      height: 30px;
+    }
+    
+    .search-icon:after {
+      font-size: 18px !important;
+      line-height: 30px !important;
+    }
+  }
+
+  /* 中等手机屏幕优化 - 391px到430px */
+  @media screen and (max-width: 430px) and (min-width: 391px) {
+    .search-icon {
+      left: calc(50% + 65px); /* 中等屏幕调整间距 */
     }
   }
 
@@ -153,15 +167,30 @@ html {
   @media screen and (max-width: 360px) {
     .search-icon {
       top: 78px;
-      left: calc(50% + 65px); /* 超小屏幕调整间距 */
+      left: calc(50% + 45px); /* 超小屏幕进一步减少间距 */
       width: 28px;
       height: 28px;
 
       &:after {
-        font-size: 18px;
+        font-size: 16px;
         line-height: 28px;
       }
     }
+  }
+
+  /* 极窄屏幕优化 - iPhone SE等 */
+  @media screen and (max-width: 320px) {
+    .search-icon {
+      left: calc(50% + 40px); /* 极窄屏幕最小间距 */
+      width: 26px;
+      height: 26px;
+
+      &:after {
+        font-size: 14px;
+        line-height: 26px;
+      }
+    }
+  }
 
     .search-form {
       top: 90px;
