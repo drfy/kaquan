@@ -1433,13 +1433,17 @@ li:has(input[type='checkbox']:checked:disabled)::before {
   #aside-container {
     width: 100%;
     border-bottom: 1px solid var(--border-color);
-    padding-bottom: 10px;
+    padding-bottom: 15px;
     background-color: var(--background-color);
-    position: relative; /* 改为相对定位，不再sticky */
+    position: relative;
+    /* 改为相对定位，不再sticky */
     box-shadow: 0px 4px 16px -16px rgba(0, 0, 0, 0.5);
-    margin-bottom: 20px; /* 添加底部间距 */
-    min-height: 120px; /* 增加高度以容纳多行导航 */
-    overflow: visible; /* 确保内容不被裁剪 */
+    margin-bottom: 20px;
+    /* 添加底部间距 */
+    min-height: 140px;
+    /* 增加高度以容纳第二行 */
+    overflow: visible;
+    /* 确保内容不被裁剪 */
   }
 
   #aside-container .nav {
@@ -1448,24 +1452,51 @@ li:has(input[type='checkbox']:checked:disabled)::before {
     gap: 3px;
     position: relative;
     padding-top: 20px;
-    justify-content: space-between;
+    justify-content: flex-start;
   }
 
-  #aside-container .nav-item {
+  /* 导航链接项目 - 第一行 */
+  #aside-container .nav-item:not(.theme-toggle-item) {
     font-size: 14px;
     line-height: 1;
-    flex: 0 0 auto; /* 不强制分配宽度 */
-    min-width: fit-content; /* 根据内容自适应 */
+    flex: 0 0 auto;
+    min-width: fit-content;
+    order: 1;
+    /* 第一行 */
   }
 
-  #aside-container .nav-item .nav-link {
+  #aside-container .nav-item:not(.theme-toggle-item) .nav-link {
     display: block;
     text-align: center;
     white-space: nowrap;
     padding: 8px 6px;
     font-size: 12px;
     box-sizing: border-box;
-    min-width: fit-content; /* 确保有足够宽度显示文字 */
+    min-width: fit-content;
+  }
+
+  /* 主题切换按钮 - 第二行居中 */
+  #aside-container .nav-item.theme-toggle-item {
+    order: 2;
+    /* 第二行 */
+    width: 100%;
+    /* 占满整行 */
+    display: flex;
+    justify-content: center;
+    /* 居中 */
+    margin-top: 8px;
+    /* 与第一行的间距 */
+    position: relative;
+    /* 为搜索图标定位做准备 */
+  }
+
+  .theme-toggle-btn {
+    width: auto;
+    /* 不占满整个宽度 */
+    max-width: 120px;
+    /* 限制最大宽度 */
+    margin-right: 40px;
+    /* 为搜索图标留出空间 */
   }
 
   .section-title {
@@ -1576,7 +1607,8 @@ li:has(input[type='checkbox']:checked:disabled)::before {
     color: white;
     border-color: var(--highlight-color);
     box-shadow: 0 0 20px rgba(79, 195, 247, 0.5);
-    transform: rotate(90deg); /* 激活时旋转图标 */
+    transform: rotate(90deg);
+    /* 激活时旋转图标 */
   }
 
   /* 移动端搜索表单夜间优化 */
