@@ -60,9 +60,11 @@ html {
 /* 移动端搜索图标优化 */
 @media screen and (max-width: 600px) {
   .search-icon {
-    position: absolute;
-    top: 85px; /* 调整到与主题按钮对齐的位置 */
-    left: calc(50% + 75px); /* 进一步增加间距，适配大屏设备 */
+    position: relative;
+    top: 0;
+    /* 重置定位，让flex布局控制间距 */
+    left: 0;
+    /* 重置定位，让flex布局控制间距 */
     width: 32px;
     height: 32px;
     cursor: pointer;
@@ -108,7 +110,8 @@ html {
   /* 移动端搜索表单位置调整 */
   .search-form {
     position: absolute;
-    top: 110px; /* 调整到搜索图标下方 */
+    top: 125px;
+    /* 调整到搜索图标下方，适应新的布局 */
     right: 8px;
     left: 8px;
     z-index: 20;
@@ -132,8 +135,10 @@ html {
     padding: 8px 12px;
     font-size: 13px;
     min-height: 36px;
-    flex: 0 0 auto; /* 确保按钮不被压缩 */
-    min-width: fit-content; /* 确保按钮有足够宽度 */
+    flex: 0 0 auto;
+    /* 确保按钮不被压缩 */
+    min-width: fit-content;
+    /* 确保按钮有足够宽度 */
   }
 
   .theme-icon {
@@ -145,7 +150,8 @@ html {
   /* 大屏移动设备优化 (iPhone 13 Pro Max等) */
   @media screen and (max-width: 600px) and (min-width: 390px) and (min-height: 800px) {
     .search-icon {
-      left: calc(50% + 105px); /* 大屏设备增加更多间距 */
+      left: 0;
+      /* 重置定位，使用flex布局控制间距 */
       width: 36px;
       height: 36px;
 
@@ -157,7 +163,8 @@ html {
     }
 
     .search-form {
-      top: 125px; /* 相应调整搜索表单位置 */
+      top: 125px;
+      /* 相应调整搜索表单位置 */
       right: 12px;
       left: 12px;
     }
@@ -181,7 +188,8 @@ html {
     .search-icon {
       top: 55px;
       /* 超小屏幕调整位置 */
-      left: calc(50% + 50px); /* 超小屏幕也保持与主题按钮的适当间距 */
+      left: calc(50% + 50px);
+      /* 超小屏幕也保持与主题按钮的适当间距 */
       width: 28px;
       height: 28px;
 
@@ -217,7 +225,8 @@ html {
     }
 
     #aside-container .nav {
-      gap: 2px; /* 减少间距以节省空间 */
+      gap: 2px;
+      /* 减少间距以节省空间 */
     }
   }
 }

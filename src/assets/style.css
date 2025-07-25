@@ -1485,8 +1485,8 @@ li:has(input[type='checkbox']:checked:disabled)::before {
     justify-content: center;
     align-items: center;
     margin-top: 10px;
-    gap: 25px;
-    /* 增加间距，避免在大屏设备上排版错乱 */
+    gap: 40px;
+    /* 大幅增加间距，确保不重叠 */
   }
 
   .theme-toggle-btn {
@@ -1499,8 +1499,8 @@ li:has(input[type='checkbox']:checked:disabled)::before {
   /* 大屏移动设备优化 (iPhone 13 Pro Max等) */
   @media screen and (max-width: 600px) and (min-width: 390px) and (min-height: 800px) {
     #aside-container .nav-item.theme-toggle-item {
-      gap: 35px;
-      /* 大屏设备进一步增加间距 */
+      gap: 60px;
+      /* 大屏设备大幅增加间距，确保完全分离 */
       margin-top: 12px;
     }
 
