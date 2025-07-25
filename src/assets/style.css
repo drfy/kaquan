@@ -1433,13 +1433,14 @@ li:has(input[type='checkbox']:checked:disabled)::before {
   #aside-container {
     width: 100%;
     border-bottom: 1px solid var(--border-color);
-    padding-bottom: 20px;
+    padding-bottom: 15px;
+    /* 减少底部内边距 */
     background-color: var(--background-color);
     position: relative;
     box-shadow: 0px 4px 16px -16px rgba(0, 0, 0, 0.5);
     margin-bottom: 20px;
-    min-height: 160px;
-    /* 增加高度 */
+    min-height: 130px;
+    /* 减少高度 */
     overflow: visible;
   }
 
@@ -1483,17 +1484,15 @@ li:has(input[type='checkbox']:checked:disabled)::before {
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-top: 15px;
-    /* 增加与第一行的间距 */
-    gap: 20px;
-    /* 两个元素之间的间距 */
+    margin-top: 10px;
+    /* 减少间距 */
   }
 
   .theme-toggle-btn {
     width: auto;
     max-width: 120px;
-    margin: 0;
-    /* 移除右边距 */
+    margin-right: 15px;
+    /* 为搜索图标留出间距 */
   }
 
   .section-title {
