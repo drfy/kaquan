@@ -1427,12 +1427,9 @@ li:has(input[type='checkbox']:checked:disabled)::before {
     border-bottom: 1px solid var(--border-color);
     padding-bottom: 10px;
     background-color: var(--background-color);
-    position: sticky;
-    top: 0;
+    position: relative; /* 改为相对定位，不再sticky */
     box-shadow: 0px 4px 16px -16px rgba(0, 0, 0, 0.5);
-    position: relative;
-    padding-right: 44px; /* 为搜索图标留出空间 */
-    min-height: 100px; /* 确保有足够高度容纳第二行 */
+    margin-bottom: 20px; /* 添加底部间距 */
   }
 
   #aside-container .nav {
@@ -1440,12 +1437,32 @@ li:has(input[type='checkbox']:checked:disabled)::before {
     flex-wrap: wrap;
     gap: 2px;
     position: relative;
-    padding-bottom: 50px; /* 为搜索图标留出空间 */
+    justify-content: space-between; /* 平均分配空间 */
   }
 
   #aside-container .nav-item {
     font-size: 14px;
     line-height: 1;
+    flex: 1; /* 让每个导航项平均分配宽度 */
+    min-width: 0; /* 防止flex项目过宽 */
+    position: relative; /* 为搜索表单定位做准备 */
+  }
+
+  #aside-container .nav-item .nav-link {
+    display: block;
+    text-align: center; /* 文字居中 */
+    white-space: nowrap; /* 防止文字换行 */
+    overflow: hidden;
+    text-overflow: ellipsis; /* 超长文字显示省略号 */
+  }
+
+  /* 搜索图标作为导航项 */
+  #aside-container .nav-item:has(.search-icon) {
+    flex: 0 0 auto; /* 搜索图标不参与flex分配 */
+    width: 40px; /* 固定宽度 */
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 
   .section-title {
