@@ -61,8 +61,8 @@ html {
 @media screen and (max-width: 600px) {
   .search-icon {
     position: absolute;
-    top: 85px; /* 调整到与主题按钮对齐的位置 */
-    left: calc(50% + 45px); /* 在主题按钮右侧，适当间距 */
+    top: 78px;
+    left: calc(50% + 75px); /* 确保在主题按钮右侧有足够间距 */
     width: 32px;
     height: 32px;
     cursor: pointer;
@@ -142,12 +142,18 @@ html {
     height: 18px;
   }
 
+  /* 中等手机屏幕优化 */
+  @media screen and (max-width: 480px) and (min-width: 361px) {
+    .search-icon {
+      left: calc(50% + 70px); /* 中等屏幕调整间距 */
+    }
+  }
+
   /* 超小屏幕优化 */
   @media screen and (max-width: 360px) {
     .search-icon {
-      top: 55px;
-      /* 超小屏幕调整位置 */
-      right: calc(50% - 70px); /* 超小屏幕也居中 */
+      top: 78px;
+      left: calc(50% + 65px); /* 超小屏幕调整间距 */
       width: 28px;
       height: 28px;
 
