@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>导航布局测试</title>
+    <style>
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: #f0f4f8;
+        }
+
+        .container {
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        .aside-container {
+            width: 100%;
+            border: 1px solid #ccc;
+            border-radius: 12px;
+            padding: 20px;
+            background: white;
+            position: relative;
+            min-height: 100px;
+            margin-bottom: 20px;
+        }
+
+        .nav {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2px;
+            position: relative;
+        }
+
+        .nav-item {
+            font-size: 14px;
+            line-height: 1;
+            flex: 1;
+            min-width: 0;
+        }
+
+        .nav-link {
+            display: block;
+            text-align: center;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            background: #e2e8f0;
+            border: 1px solid #cbd5e0;
+            border-radius: 8px;
+            padding: 8px 12px;
+            color: #2d3748;
+            text-decoration: none;
+        }
+
+        .search-icon {
+            position: absolute;
+            top: 60px;
+            right: 8px;
+            width: 32px;
+            height: 32px;
+            cursor: pointer;
+            appearance: none;
+            outline: none;
+            z-index: 10;
+        }
+
+        .search-icon:after {
+            content: '🔍';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: white;
+            border: 1px solid #cbd5e0;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            transition: all 0.2s ease;
+        }
+
+        .search-icon:hover:after {
+            background: #f7fafc;
+            transform: scale(1.1);
+            border-color: #3182ce;
+        }
+
+        .search-icon:checked:after {
+            background: #3182ce;
+            color: white;
+            border-color: #3182ce;
+            transform: rotate(90deg);
+        }
+
+        .search-form {
+            display: none;
+            position: absolute;
+            top: 100px;
+            right: 8px;
+            left: 8px;
+            background: white;
+            border: 1px solid #cbd5e0;
+            border-radius: 8px;
+            padding: 12px;
+            z-index: 20;
+        }
+
+        .search-icon:checked + .search-form {
+            display: block;
+            animation: slideDown 0.2s ease-out;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 8px 12px;
+            border: 1px solid #cbd5e0;
+            border-radius: 6px;
+            font-size: 14px;
+            outline: none;
+            box-sizing: border-box;
+        }
+
+        .search-input:focus {
+            border-color: #3182ce;
+            box-shadow: 0 0 0 2px rgba(49, 130, 206, 0.1);
+        }
+
+        .description {
+            background: #fff5f5;
+            border: 1px solid #fed7d7;
+            border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 20px;
+        }
+
+        .description h3 {
+            margin: 0 0 12px 0;
+            color: #c53030;
+        }
+
+        .description ul {
+            margin: 0;
+            padding-left: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="description">
+            <h3>正确的布局应该是：</h3>
+            <ul>
+                <li><strong>第一行</strong>：4个导航按钮平均分配宽度</li>
+                <li><strong>第二行</strong>：左边是"交流大厅"和"🌙 夜晚"，右边是搜索🔍图标</li>
+                <li><strong>搜索表单</strong>：点击🔍后在下方展开</li>
+            </ul>
+        </div>
+
+        <div class="aside-container">
+            <div class="nav">
+                <!-- 第一行：4个导航按钮 -->
+                <div class="nav-item">
+                    <a href="#" class="nav-link">Home</a>
+                </div>
+                <div class="nav-item">
+                    <a href="#" class="nav-link">省份直达</a>
+                </div>
+                <div class="nav-item">
+                    <a href="#" class="nav-link">外部链接</a>
+                </div>
+                <div class="nav-item">
+                    <a href="#" class="nav-link">神卡合集</a>
+                </div>
+                
+                <!-- 第二行：交流大厅和主题切换 -->
+                <div class="nav-item">
+                    <a href="#" class="nav-link">交流大厅</a>
+                </div>
+                <div class="nav-item">
+                    <a href="#" class="nav-link">🌙 夜晚</a>
+                </div>
+            </div>
+            
+            <!-- 搜索图标在第二行最右边 -->
+            <input class="search-icon" type="checkbox" />
+            <form class="search-form">
+                <input type="text" class="search-input" placeholder="🔍 搜索..." />
+            </form>
+        </div>
+
+        <div style="background: #f0fff4; border: 1px solid #9ae6b4; border-radius: 8px; padding: 16px;">
+            <h3 style="margin: 0 0 12px 0; color: #22543d;">测试说明：</h3>
+            <p style="margin: 0;">这个布局展示了正确的导航排版：第一行4个按钮平均分配，第二行左边2个按钮，右边搜索图标。</p>
+        </div>
+    </div>
+</body>
+</html>

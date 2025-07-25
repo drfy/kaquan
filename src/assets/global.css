@@ -60,10 +60,14 @@ html {
 /* 移动端搜索图标优化 */
 @media screen and (max-width: 600px) {
   .search-icon {
-    position: relative;
+    position: absolute;
+    top: 60px;
+    /* 第二行位置 */
+    right: 8px;
     width: 32px;
     height: 32px;
     cursor: pointer;
+    z-index: 10;
 
     &:after {
       font-size: 20px;
@@ -105,11 +109,11 @@ html {
   /* 移动端搜索表单位置调整 */
   .search-form {
     position: absolute;
-    top: 100%;
-    right: -8px;
-    width: 200px;
+    top: 100px;
+    /* 搜索图标下方 */
+    right: 8px;
+    left: 8px;
     z-index: 20;
-    margin-top: 8px;
     animation: slideDown 0.2s ease-out;
   }
 
@@ -141,6 +145,9 @@ html {
   /* 超小屏幕优化 */
   @media screen and (max-width: 360px) {
     .search-icon {
+      top: 55px;
+      /* 超小屏幕调整位置 */
+      right: 4px;
       width: 28px;
       height: 28px;
 
@@ -150,9 +157,11 @@ html {
       }
     }
 
-    #aside-container .nav-item:has(.search-icon) {
-      width: 32px;
-      /* 超小屏幕调整宽度 */
+    .search-form {
+      top: 90px;
+      /* 相应调整搜索表单位置 */
+      right: 4px;
+      left: 4px;
     }
 
     .theme-toggle-btn {
