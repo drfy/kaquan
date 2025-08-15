@@ -420,6 +420,20 @@ html {
   font-style: italic;
 }
 
+.info-card-content img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 6px;
+  margin: 8px 0;
+  box-shadow: var(--shadows);
+  transition: all 0.3s ease;
+}
+
+.info-card-content img:hover {
+  box-shadow: var(--shadows-hover);
+  transform: scale(1.02);
+}
+
 .copyright-wrap {
   color: #666;
   line-height: 1.5;

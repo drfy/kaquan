@@ -142,8 +142,10 @@ RSS_BEAUTIFY=true
 
 ## Custom information card content in Markdown format
 ## This will be displayed below the channel statistics (subscribers, photos, links)
-## Supports full Markdown syntax including headers, links, lists, code blocks, etc.
+## Supports full Markdown syntax including headers, links, lists, code blocks, images, etc.
 IMGINFO=## 📋 使用说明
+
+![示例图片](https://cxt.pages.dev/file/1755280050324_qtwx.png)
 
 ### 🌟 功能特点
 - **实时同步** - 自动同步Telegram频道内容
@@ -154,7 +156,7 @@ IMGINFO=## 📋 使用说明
 - [项目主页](https://github.com/ccbikai/BroadcastChannel)
 - [使用文档](https://github.com/ccbikai/BroadcastChannel/blob/main/README.md)
 
-> 可以通过修改 `IMGINFO` 环境变量来自定义此卡片的内容，支持完整的Markdown语法。
+> 可以通过修改 `IMGINFO` 环境变量来自定义此卡片的内容，支持完整的Markdown语法，包括图片显示。
 ```
 
 ## 🙋🏻 FAQs

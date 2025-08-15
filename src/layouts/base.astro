@@ -4,6 +4,7 @@ import '../assets/style.css'
 import '../assets/global.css'
 import { SEO } from 'astro-seo'
 import { getEnv } from '../lib/env'
+import { markdownToHtml } from '../lib/markdown'
 import backToTopIcon from '../assets/back-to-top.svg'
 
 const { SITE_URL, RSS_URL, RSS_PREFIX } = Astro.locals
@@ -55,7 +56,8 @@ const HEADER_INJECT = getEnv(import.meta.env, Astro, 'HEADER_INJECT')
 const FOOTER_INJECT = getEnv(import.meta.env, Astro, 'FOOTER_INJECT')
 const TAGS = getEnv(import.meta.env, Astro, 'TAGS')
 const LINKS = getEnv(import.meta.env, Astro, 'LINKS')
-const IMGINFO = getEnv(import.meta.env, Astro, 'IMGINFO')
+const IMGINFO_RAW = getEnv(import.meta.env, Astro, 'IMGINFO')
+const IMGINFO = IMGINFO_RAW ? await markdownToHtml(IMGINFO_RAW) : ''
 const navs = (getEnv(import.meta.env, Astro, 'NAVS') || '')
   .split(';')
   .filter(Boolean)
