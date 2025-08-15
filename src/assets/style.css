@@ -221,6 +221,68 @@ body {
   border-color: var(--highlight-color);
 }
 
+/* 夜间模式信息卡片样式 */
+[data-theme="night"] .info-card {
+  background: rgba(26, 26, 46, 0.6);
+  border: 1px solid rgba(79, 195, 247, 0.2);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3),
+              0 2px 8px rgba(0, 0, 0, 0.2),
+              inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+[data-theme="night"] .info-card:hover {
+  background: rgba(26, 26, 46, 0.8);
+  border-color: rgba(79, 195, 247, 0.4);
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.4),
+              0 4px 12px rgba(0, 0, 0, 0.3),
+              0 0 20px rgba(79, 195, 247, 0.1),
+              inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  transform: translateY(-2px);
+}
+
+[data-theme="night"] .info-card-content {
+  color: var(--foreground-color);
+}
+
+[data-theme="night"] .info-card-content h1,
+[data-theme="night"] .info-card-content h2,
+[data-theme="night"] .info-card-content h3,
+[data-theme="night"] .info-card-content h4,
+[data-theme="night"] .info-card-content h5,
+[data-theme="night"] .info-card-content h6 {
+  color: #4fc3f7;
+  text-shadow: 0 0 8px rgba(79, 195, 247, 0.3);
+}
+
+[data-theme="night"] .info-card-content a {
+  color: #a6d2ff;
+}
+
+[data-theme="night"] .info-card-content a:hover {
+  color: #87ceeb;
+  border-bottom-color: #87ceeb;
+  text-shadow: 0 0 4px rgba(135, 206, 235, 0.4);
+}
+
+[data-theme="night"] .info-card-content code {
+  background: rgba(12, 12, 15, 0.8);
+  border: 1px solid rgba(79, 195, 247, 0.2);
+  color: #e1e5f2;
+}
+
+[data-theme="night"] .info-card-content pre {
+  background: rgba(12, 12, 15, 0.8);
+  border: 1px solid rgba(79, 195, 247, 0.2);
+}
+
+[data-theme="night"] .info-card-content blockquote {
+  background: rgba(12, 12, 15, 0.6);
+  border-left: 3px solid #4fc3f7;
+  box-shadow: inset 0 0 8px rgba(79, 195, 247, 0.1);
+}
+
 /* 夜间模式下图片和视频的优化 */
 [data-theme="night"] img:not(.header-avatar):not(.breadcrumb-avatar) {
   opacity: 0.9;

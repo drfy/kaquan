@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IMGINFO 信息卡片测试</title>
+    <style>
+        :root {
+            /* 日间主题变量 */
+            --background-color: linear-gradient(135deg, #f0f4f8 0%, #e8f2f7 25%, #f4f8fb 50%, #e9f3f8 75%, #f2f6fa 100%);
+            --foreground-color: #2d3748;
+            --highlight-color: #3182ce;
+            --box-border-radius: 12px;
+            --shadows: 0 2px 8px rgba(99, 179, 237, 0.08), 0 4px 16px rgba(99, 179, 237, 0.05);
+            --shadows-hover: 0 4px 16px rgba(99, 179, 237, 0.12), 0 8px 32px rgba(99, 179, 237, 0.08);
+            --border-color: rgba(99, 179, 237, 0.15);
+            --link-color: var(--highlight-color);
+            --cell-background-color: rgba(255, 255, 255, 0.8);
+            --code-background-color: rgba(99, 179, 237, 0.05);
+        }
+
+        /* 夜间主题变量 */
+        [data-theme="night"] {
+            --background-color: linear-gradient(135deg, #0c0c0f 0%, #1a1a2e 25%, #16213e 50%, #0f3460 75%, #0e3460 100%);
+            --foreground-color: #e1e5f2;
+            --highlight-color: #4fc3f7;
+            --shadows: 0 2px 16px rgba(0, 0, 0, 0.6), 0 8px 32px rgba(0, 0, 0, 0.4);
+            --shadows-hover: 0 4px 24px rgba(0, 0, 0, 0.7), 0 12px 48px rgba(0, 0, 0, 0.5);
+            --border-color: rgba(225, 229, 242, 0.12);
+            --cell-background-color: rgba(26, 26, 46, 0.8);
+            --code-background-color: rgba(12, 12, 15, 0.8);
+        }
+
+        body {
+            background: var(--background-color);
+            color: var(--foreground-color);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+            transition: all 0.3s ease;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .theme-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: var(--cell-background-color);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 8px 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .theme-toggle:hover {
+            box-shadow: var(--shadows-hover);
+        }
+
+        /* 频道统计信息样式 */
+        .channel-stats {
+            padding: 12px 8px;
+            margin-bottom: 8px;
+            background: var(--code-background-color);
+            border-radius: var(--box-border-radius);
+            border: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+        }
+
+        .stat-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 4px;
+            font-size: 12px;
+            color: var(--foreground-color);
+        }
+
+        .stat-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .stat-emoji {
+            margin-right: 6px;
+            font-size: 16px;
+            filter: brightness(1.4) saturate(2.0) contrast(1.2);
+            text-shadow: 0 0 4px rgba(255, 140, 0, 0.6);
+        }
+
+        .stat-text {
+            font-weight: 500;
+        }
+
+        /* 信息卡片样式 */
+        .info-card {
+            padding: 12px;
+            margin-bottom: 12px;
+            background: var(--cell-background-color);
+            border-radius: var(--box-border-radius);
+            border: 1px solid var(--border-color);
+            box-shadow: var(--shadows);
+            transition: all 0.3s ease;
+        }
+
+        .info-card:hover {
+            box-shadow: var(--shadows-hover);
+            transform: translateY(-1px);
+        }
+
+        .info-card-content {
+            font-size: 14px;
+            line-height: 1.6;
+            color: var(--foreground-color);
+        }
+
+        .info-card-content h1,
+        .info-card-content h2,
+        .info-card-content h3,
+        .info-card-content h4,
+        .info-card-content h5,
+        .info-card-content h6 {
+            margin: 8px 0 6px 0;
+            color: var(--highlight-color);
+            font-weight: 600;
+        }
+
+        .info-card-content p {
+            margin: 6px 0;
+        }
+
+        .info-card-content ul,
+        .info-card-content ol {
+            margin: 6px 0;
+            padding-left: 20px;
+        }
+
+        .info-card-content li {
+            margin: 2px 0;
+        }
+
+        .info-card-content a {
+            color: var(--link-color);
+            text-decoration: none;
+            border-bottom: 1px solid transparent;
+            transition: all 0.2s ease;
+        }
+
+        .info-card-content a:hover {
+            border-bottom-color: var(--link-color);
+        }
+
+        .info-card-content code {
+            background: var(--code-background-color);
+            padding: 2px 4px;
+            border-radius: 4px;
+            font-size: 13px;
+            border: 1px solid var(--border-color);
+        }
+
+        .info-card-content pre {
+            background: var(--code-background-color);
+            padding: 8px 12px;
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
+            overflow-x: auto;
+            margin: 8px 0;
+        }
+
+        .info-card-content pre code {
+            background: none;
+            padding: 0;
+            border: none;
+        }
+
+        .info-card-content blockquote {
+            margin: 8px 0;
+            padding: 8px 12px;
+            border-left: 3px solid var(--highlight-color);
+            background: var(--code-background-color);
+            border-radius: 0 6px 6px 0;
+            font-style: italic;
+        }
+
+        /* 夜间模式信息卡片样式 */
+        [data-theme="night"] .info-card {
+            background: rgba(26, 26, 46, 0.6);
+            border: 1px solid rgba(79, 195, 247, 0.2);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3), 
+                        0 2px 8px rgba(0, 0, 0, 0.2),
+                        inset 0 1px 0 rgba(255, 255, 255, 0.05);
+        }
+
+        [data-theme="night"] .info-card:hover {
+            background: rgba(26, 26, 46, 0.8);
+            border-color: rgba(79, 195, 247, 0.4);
+            box-shadow: 0 6px 24px rgba(0, 0, 0, 0.4),
+                        0 4px 12px rgba(0, 0, 0, 0.3),
+                        0 0 20px rgba(79, 195, 247, 0.1),
+                        inset 0 1px 0 rgba(255, 255, 255, 0.08);
+            transform: translateY(-2px);
+        }
+
+        [data-theme="night"] .info-card-content h1,
+        [data-theme="night"] .info-card-content h2,
+        [data-theme="night"] .info-card-content h3,
+        [data-theme="night"] .info-card-content h4,
+        [data-theme="night"] .info-card-content h5,
+        [data-theme="night"] .info-card-content h6 {
+            color: #4fc3f7;
+            text-shadow: 0 0 8px rgba(79, 195, 247, 0.3);
+        }
+
+        [data-theme="night"] .info-card-content a {
+            color: #a6d2ff;
+        }
+
+        [data-theme="night"] .info-card-content a:hover {
+            color: #87ceeb;
+            border-bottom-color: #87ceeb;
+            text-shadow: 0 0 4px rgba(135, 206, 235, 0.4);
+        }
+
+        [data-theme="night"] .info-card-content code {
+            background: rgba(12, 12, 15, 0.8);
+            border: 1px solid rgba(79, 195, 247, 0.2);
+            color: #e1e5f2;
+        }
+
+        [data-theme="night"] .info-card-content pre {
+            background: rgba(12, 12, 15, 0.8);
+            border: 1px solid rgba(79, 195, 247, 0.2);
+        }
+
+        [data-theme="night"] .info-card-content blockquote {
+            background: rgba(12, 12, 15, 0.6);
+            border-left: 3px solid #4fc3f7;
+            box-shadow: inset 0 0 8px rgba(79, 195, 247, 0.1);
+        }
+    </style>
+</head>
+<body>
+    <button class="theme-toggle" onclick="toggleTheme()">🌙 切换主题</button>
+    
+    <div class="container">
+        <h1>IMGINFO 信息卡片测试</h1>
+        
+        <!-- 频道统计信息 -->
+        <div class="channel-stats">
+            <div class="stat-item">
+                <span class="stat-emoji">🔥</span>
+                <span class="stat-text">1,234 订阅者</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-emoji">🌈</span>
+                <span class="stat-text">567 图片</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-emoji">⚡</span>
+                <span class="stat-text">89 链接</span>
+            </div>
+        </div>
+
+        <!-- 信息卡片 -->
+        <div class="info-card">
+            <div class="info-card-content">
+                <h2>📋 使用说明</h2>
+                
+                <h3>🌟 功能特点</h3>
+                <ul>
+                    <li><strong>实时同步</strong> - 自动同步Telegram频道内容</li>
+                    <li><strong>响应式设计</strong> - 完美适配桌面和移动设备</li>
+                    <li><strong>主题切换</strong> - 支持白天/夜间模式切换</li>
+                    <li><strong>搜索功能</strong> - 快速查找历史内容</li>
+                </ul>
+                
+                <h3>🔗 相关链接</h3>
+                <ul>
+                    <li><a href="https://github.com/ccbikai/BroadcastChannel">项目主页</a></li>
+                    <li><a href="https://github.com/ccbikai/BroadcastChannel/blob/main/README.md">使用文档</a></li>
+                    <li><a href="https://github.com/ccbikai/BroadcastChannel/issues">问题反馈</a></li>
+                </ul>
+                
+                <h3>💡 小贴士</h3>
+                <blockquote>
+                    可以通过修改 <code>IMGINFO</code> 环境变量来自定义此卡片的内容，支持完整的Markdown语法。
+                </blockquote>
+                
+                <hr>
+                <p><em>最后更新：2024年</em></p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function toggleTheme() {
+            const body = document.body;
+            const currentTheme = body.getAttribute('data-theme');
+            const newTheme = currentTheme === 'night' ? '' : 'night';
+            body.setAttribute('data-theme', newTheme);
+            
+            const button = document.querySelector('.theme-toggle');
+            button.textContent = newTheme === 'night' ? '☀️ 切换主题' : '🌙 切换主题';
+        }
+    </script>
+</body>
+</html>

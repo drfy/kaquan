@@ -139,6 +139,22 @@ RSS_ENABLED=true
 
 ## Enable RSS beautify
 RSS_BEAUTIFY=true
+
+## Custom information card content in Markdown format
+## This will be displayed below the channel statistics (subscribers, photos, links)
+## Supports full Markdown syntax including headers, links, lists, code blocks, etc.
+IMGINFO=## 📋 使用说明
+
+### 🌟 功能特点
+- **实时同步** - 自动同步Telegram频道内容
+- **响应式设计** - 完美适配桌面和移动设备
+- **主题切换** - 支持白天/夜间模式切换
+
+### 🔗 相关链接
+- [项目主页](https://github.com/ccbikai/BroadcastChannel)
+- [使用文档](https://github.com/ccbikai/BroadcastChannel/blob/main/README.md)
+
+> 可以通过修改 `IMGINFO` 环境变量来自定义此卡片的内容，支持完整的Markdown语法。
 ```
 
 ## 🙋🏻 FAQs

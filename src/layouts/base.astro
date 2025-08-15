@@ -55,6 +55,7 @@ const HEADER_INJECT = getEnv(import.meta.env, Astro, 'HEADER_INJECT')
 const FOOTER_INJECT = getEnv(import.meta.env, Astro, 'FOOTER_INJECT')
 const TAGS = getEnv(import.meta.env, Astro, 'TAGS')
 const LINKS = getEnv(import.meta.env, Astro, 'LINKS')
+const IMGINFO = getEnv(import.meta.env, Astro, 'IMGINFO')
 const navs = (getEnv(import.meta.env, Astro, 'NAVS') || '')
   .split(';')
   .filter(Boolean)
@@ -239,6 +240,11 @@ const navs = (getEnv(import.meta.env, Astro, 'NAVS') || '')
                     <span class="stat-text">{channel.stats.links} 链接</span>
                   </div>
                 )}
+              </div>
+            )}
+            {IMGINFO && IMGINFO.length > 0 && (
+              <div class="info-card">
+                <div class="info-card-content" set:html={IMGINFO} />
               </div>
             )}
             <div class="copyright-wrap">
