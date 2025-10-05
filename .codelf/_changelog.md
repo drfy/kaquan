@@ -1,23 +1,29 @@
-## 2025-10-05 21:41:21
+## 2025-10-05 21:56:39
 
-### Markdown超链接渲染支持优化
+### Markdown超链接渲染支持优化（修复版）
 
-**Change Type**: feature/fix
+**Change Type**: fix
 
-> **Purpose**: 优化Telegram内容中Markdown格式超链接的渲染，使其能够正确显示为可点击的HTML链接
+> **Purpose**: 修复Markdown格式超链接的正确渲染，避免HTML标签破坏
 > **Detailed Description**: 
-> 1. 在 `telegram/index.js` 的 `modifyHTMLContent` 函数中添加了 `processMarkdownLinks` 递归处理函数
-> 2. 该函数会遍历所有文本节点，识别 `[文字](链接)` 格式的Markdown超链接
-> 3. 将Markdown链接格式转换为标准HTML `<a>` 标签，并添加 `target="_blank"` 和 `rel="noopener noreferrer"` 属性
-> 4. 在 `item.css` 中添加了链接样式优化，包含hover效果和颜色定义
-> **Reason for Change**: Telegram返回的HTML内容中，Markdown超链接格式没有被转换，导致在页面上显示为纯文本而非可点击链接
+> 1. 使用安全的DOM节点遍历方式替代字符串级别的正则替换
+> 2. 在 `modifyHTMLContent` 函数中实现 `replaceMarkdownLinks` 递归函数
+> 3. 只处理纯文本节点（`child.type === 'text'`），避免破坏已有的HTML结构
+> 4. 智能跳过 `<a>`、`<pre>`、`<code>` 标签，避免重复处理
+> 5. 将 `[文字](链接)` 转换为 `<a href="链接" target="_blank" rel="noopener noreferrer">文字</a>`
+> 6. 添加链接样式优化（`item.css`）：悬停效果、主题色彩
+> **Reason for Change**: 
+> - 之前的字符串替换方式会破坏Telegram已经生成的HTML结构
+> - Telegram可能已经将部分URL转换为链接，导致正则匹配错误
+> - 需要更精确的DOM操作来保证HTML结构完整性
 > **Impact Scope**: 
 > - 影响所有从Telegram频道获取的内容渲染
-> - 不会影响已存在的HTML链接（如Telegram自动生成的链接）
-> - 代码块和已存在的 `<a>` 标签不会被重复处理
+> - 不会影响已存在的HTML链接（智能跳过`<a>`标签）
+> - 不会影响代码块（智能跳过`<pre>`和`<code>`标签）
+> - 只处理纯文本节点中的Markdown链接格式
 > **API Changes**: 无API变更
 > **Configuration Changes**: 无配置变更
-> **Performance Impact**: 性能影响极小，仅在内容解析阶段增加了文本节点的递归遍历
+> **Performance Impact**: 性能影响极小，使用高效的DOM遍历算法
 
 **实现细节**:
 ```
@@ -25,15 +31,21 @@ root
 - src
   - lib
     - telegram
-      - index.js // refact: modifyHTMLContent函数中添加processMarkdownLinks处理逻辑
+      - index.js // fix: 使用DOM节点遍历替代字符串替换，安全处理Markdown链接
   - assets
-    - item.css // add: 添加Markdown超链接样式优化（颜色、hover效果）
+    - item.css // add: 添加Markdown超链接样式优化（颜色、hover效果、过渡动画）
 ```
+
+**关键技术点**:
+1. **安全性**：使用 `child.type === 'text'` 判断确保只处理文本节点
+2. **递归处理**：遍历所有子节点，保证嵌套内容也能正确转换
+3. **智能过滤**：跳过 `<a>`、`<pre>`、`<code>` 避免重复处理和破坏代码
+4. **文本检查**：先用 `$(content).text()` 检查是否存在Markdown链接，提升性能
 
 **测试示例**:
 - 输入: `❇️免费神卡：[点击领取](http://ax.lxhaoka.cn/index?k=eHM0R1F4Yng4eUU9)`
-- 输出: `❇️免费神卡：<a href="http://ax.lxhaoka.cn/index?k=eHM0R1F4Yng4eUU9" target="_blank" rel="noopener noreferrer" title="点击领取">点击领取</a>`
-- 显示效果: 文字"点击领取"显示为可点击的超链接，点击后在新标签页打开
+- 输出: `❇️免费神卡：<a href="http://ax.lxhaoka.cn/index?k=eHM0R1F4Yng4eUU9" target="_blank" rel="noopener noreferrer">点击领取</a>`
+- 显示效果: 文字"点击领取"显示为可点击的超链接，点击后在新标签页打开，带有悬停动画效果
 
 ## 2025-09-13 09:12:20
 
