@@ -100,6 +100,12 @@ function getReply($, item, { channel }) {
 }
 
 function modifyHTMLContent($, content, { index } = {}) {
+  // 【诊断】输出Telegram原始HTML
+  const originalHtml = $(content).html()
+  if (originalHtml && originalHtml.includes('[')) {
+    console.log('🔍 检测到方括号，原始HTML:', originalHtml.substring(0, 400))
+  }
+  
   $(content).find('.emoji')?.removeAttr('style')
   $(content).find('a')?.each((_index, a) => {
     $(a)?.attr('title', $(a)?.text())?.removeAttr('onclick')
@@ -110,6 +116,33 @@ function modifyHTMLContent($, content, { index } = {}) {
       ?.wrap('<label class="spoiler-button"></label>')
       ?.before(`<input type="checkbox" />`)
   })
+  // 处理Markdown格式的超链接 [文字](链接)
+  // Telegram可能会将括号转换为HTML实体，需要处理多种情况
+  let html = $(content).html() || ''
+  
+  if (html.length > 0) {
+    // 方案1: 直接匹配原始字符 [文字](链接)
+    const newHtml1 = html.replace(
+      /\[([^\]]+)\]\(([^)]+)\)/g,
+      '<a href="$2" target="_blank" rel="noopener noreferrer">$1</a>'
+    )
+    
+    // 如果方案1有替换
+    if (newHtml1 !== html) {
+      $(content).html(newHtml1)
+    } else {
+      // 方案2: 尝试匹配HTML实体编码的括号
+      const newHtml2 = html.replace(
+        /(?:&#91;|\&lsqb;)([^\]&#93;&]+)(?:&#93;|\&rsqb;)(?:&#40;)([^)&#41;]+)(?:&#41;)/gi,
+        '<a href="$2" target="_blank" rel="noopener noreferrer">$1</a>'
+      )
+      
+      if (newHtml2 !== html) {
+        $(content).html(newHtml2)
+      }
+    }
+  }
+  
   $(content).find('pre').each((_index, pre) => {
     try {
       $(pre).find('br')?.replaceWith('\n')
@@ -123,44 +156,6 @@ function modifyHTMLContent($, content, { index } = {}) {
       console.error(error)
     }
   })
-  
-  // 处理Markdown格式的超链接 [文字](链接)
-  // 使用更安全的方式：先获取纯文本，处理后再设置HTML
-  let contentHtml = $(content).html()
-  if (contentHtml) {
-    // 获取纯文本内容
-    const textContent = $(content).text()
-    
-    // 检查是否包含Markdown链接格式
-    const hasMarkdownLinks = /\[([^\]]+)\]\(([^)]+)\)/.test(textContent)
-    
-    if (hasMarkdownLinks) {
-      // 使用DOM操作而不是字符串替换
-      // 遍历所有文本节点，只处理纯文本部分
-      function replaceMarkdownLinks(node) {
-        const children = $(node).contents().toArray()
-        children.forEach(child => {
-          if (child.type === 'text') {
-            const text = child.data
-            // 匹配 [文字](链接) 格式，但只处理不在标签内的
-            if (/\[([^\]]+)\]\(([^)]+)\)/.test(text)) {
-              // 将文本节点分割并替换
-              const newHtml = text.replace(
-                /\[([^\]]+)\]\(([^)]+)\)/g,
-                '<a href="$2" target="_blank" rel="noopener noreferrer">$1</a>'
-              )
-              $(child).replaceWith(newHtml)
-            }
-          } else if (child.type === 'tag' && child.name !== 'a' && child.name !== 'pre' && child.name !== 'code') {
-            // 递归处理子元素（但跳过链接、代码块）
-            replaceMarkdownLinks(child)
-          }
-        })
-      }
-      
-      replaceMarkdownLinks(content)
-    }
-  }
   
   return content
 }
