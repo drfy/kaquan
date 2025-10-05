@@ -125,37 +125,42 @@ function modifyHTMLContent($, content, { index } = {}) {
   })
   
   // 处理Markdown格式的超链接 [文字](链接)
-  // 需要在所有文本节点中查找并替换
-  function processMarkdownLinks(node) {
-    // 遍历所有子节点
-    $(node).contents().each((_index, child) => {
-      if (child.type === 'text') {
-        // 对文本节点进行Markdown链接转换
-        const text = $(child).text()
-        // 匹配 [文字](链接) 格式，支持链接中包含参数
-        const markdownLinkRegex = /\[([^\]]+)\]\(([^)]+)\)/g
-        if (markdownLinkRegex.test(text)) {
-          const htmlText = text.replace(markdownLinkRegex, '<a href="$2" target="_blank" rel="noopener noreferrer" title="$1">$1</a>')
-          // 用新的HTML替换文本节点
-          $(child).replaceWith(htmlText)
-        }
-      } else if (child.type === 'tag' && child.name !== 'a' && child.name !== 'pre' && child.name !== 'code') {
-        // 递归处理非链接、非代码块的标签节点
-        processMarkdownLinks(child)
-      }
-    })
+  // 直接在HTML字符串级别进行处理，更简单高效
+  let contentHtml = $(content).html()
+  if (contentHtml) {
+    console.log('原始HTML:', contentHtml.substring(0, 200))
+    
+    // 匹配 [文字](链接) 格式
+    // 使用正则表达式匹配，但要避免匹配已经在<a>标签中的内容
+    const markdownLinkRegex = /\[([^\]]+)\]\(([^)]+)\)/g
+    const newHtml = contentHtml.replace(markdownLinkRegex, '<a href="$2" target="_blank" rel="noopener noreferrer" title="$1">$1</a>')
+    
+    if (newHtml !== contentHtml) {
+      console.log('检测到Markdown链接，已转换')
+      console.log('转换后HTML:', newHtml.substring(0, 200))
+      $(content).html(newHtml)
+    } else {
+      console.log('未检测到Markdown链接')
+    }
   }
-  
-  processMarkdownLinks(content)
   
   return content
 }
 
 function getPost($, item, { channel, staticProxy, index = 0 }) {
   item = item ? $(item).find('.tgme_widget_message') : $('.tgme_widget_message')
-  const content = $(item).find('.js-message_reply_text')?.length > 0
-    ? modifyHTMLContent($, $(item).find('.tgme_widget_message_text.js-message_text'), { index })
-    : modifyHTMLContent($, $(item).find('.tgme_widget_message_text'), { index })
+  
+  // 获取原始内容进行调试
+  const rawContent = $(item).find('.js-message_reply_text')?.length > 0
+    ? $(item).find('.tgme_widget_message_text.js-message_text')
+    : $(item).find('.tgme_widget_message_text')
+  
+  console.log('===== Telegram原始HTML =====')
+  console.log(rawContent.html()?.substring(0, 300))
+  console.log('===== 原始文本 =====')
+  console.log(rawContent.text()?.substring(0, 200))
+  
+  const content = modifyHTMLContent($, rawContent, { index })
   const title = content?.text()?.match(/^.*?(?=[。\n]|http\S)/g)?.[0] ?? content?.text() ?? ''
   const id = $(item).attr('data-post')?.replace(new RegExp(`${channel}/`, 'i'), '')
 
@@ -212,7 +217,10 @@ const unnessaryHeaders = ['host', 'cookie', 'origin', 'referer']
 
 export async function getChannelInfo(Astro, { before = '', after = '', q = '', type = 'list', id = '' } = {}) {
   const cacheKey = JSON.stringify({ before, after, q, type, id })
-  const cachedResult = cache.get(cacheKey)
+  
+  // 开发模式下禁用缓存，便于调试
+  const isDev = import.meta.env.DEV
+  const cachedResult = isDev ? null : cache.get(cacheKey)
 
   if (cachedResult) {
     console.info('Match Cache', { before, after, q, type, id })
