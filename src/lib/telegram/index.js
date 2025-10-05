@@ -123,6 +123,31 @@ function modifyHTMLContent($, content, { index } = {}) {
       console.error(error)
     }
   })
+  
+  // 处理Markdown格式的超链接 [文字](链接)
+  // 需要在所有文本节点中查找并替换
+  function processMarkdownLinks(node) {
+    // 遍历所有子节点
+    $(node).contents().each((_index, child) => {
+      if (child.type === 'text') {
+        // 对文本节点进行Markdown链接转换
+        const text = $(child).text()
+        // 匹配 [文字](链接) 格式，支持链接中包含参数
+        const markdownLinkRegex = /\[([^\]]+)\]\(([^)]+)\)/g
+        if (markdownLinkRegex.test(text)) {
+          const htmlText = text.replace(markdownLinkRegex, '<a href="$2" target="_blank" rel="noopener noreferrer" title="$1">$1</a>')
+          // 用新的HTML替换文本节点
+          $(child).replaceWith(htmlText)
+        }
+      } else if (child.type === 'tag' && child.name !== 'a' && child.name !== 'pre' && child.name !== 'code') {
+        // 递归处理非链接、非代码块的标签节点
+        processMarkdownLinks(child)
+      }
+    })
+  }
+  
+  processMarkdownLinks(content)
+  
   return content
 }
 

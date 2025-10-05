@@ -1,5 +1,22 @@
 .content {
   word-break: break-word;
+  
+  /* Markdown超链接样式优化 */
+  a {
+    color: var(--highlight-color, #0066cc);
+    text-decoration: none;
+    border-bottom: 1px solid transparent;
+    transition: all 0.2s ease;
+    
+    &:hover {
+      border-bottom-color: var(--highlight-color, #0066cc);
+      opacity: 0.8;
+    }
+    
+    &:active {
+      opacity: 0.6;
+    }
+  }
 
   .image-list-container {
     display: grid;
