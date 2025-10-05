@@ -100,12 +100,6 @@ function getReply($, item, { channel }) {
 }
 
 function modifyHTMLContent($, content, { index } = {}) {
-  // 【诊断】输出Telegram原始HTML
-  const originalHtml = $(content).html()
-  if (originalHtml && originalHtml.includes('[')) {
-    console.log('🔍 检测到方括号，原始HTML:', originalHtml.substring(0, 400))
-  }
-  
   $(content).find('.emoji')?.removeAttr('style')
   $(content).find('a')?.each((_index, a) => {
     $(a)?.attr('title', $(a)?.text())?.removeAttr('onclick')
@@ -116,32 +110,44 @@ function modifyHTMLContent($, content, { index } = {}) {
       ?.wrap('<label class="spoiler-button"></label>')
       ?.before(`<input type="checkbox" />`)
   })
-  // 处理Markdown格式的超链接 [文字](链接)
-  // Telegram可能会将括号转换为HTML实体，需要处理多种情况
-  let html = $(content).html() || ''
   
-  if (html.length > 0) {
-    // 方案1: 直接匹配原始字符 [文字](链接)
-    const newHtml1 = html.replace(
-      /\[([^\]]+)\]\(([^)]+)\)/g,
-      '<a href="$2" target="_blank" rel="noopener noreferrer">$1</a>'
-    )
+  // 处理Markdown格式的超链接 [文字](链接)
+  // 使用安全的DOM遍历方式，避免破坏HTML结构
+  function processTextNodes(node) {
+    const walker = $(node).contents()
     
-    // 如果方案1有替换
-    if (newHtml1 !== html) {
-      $(content).html(newHtml1)
-    } else {
-      // 方案2: 尝试匹配HTML实体编码的括号
-      const newHtml2 = html.replace(
-        /(?:&#91;|\&lsqb;)([^\]&#93;&]+)(?:&#93;|\&rsqb;)(?:&#40;)([^)&#41;]+)(?:&#41;)/gi,
-        '<a href="$2" target="_blank" rel="noopener noreferrer">$1</a>'
-      )
+    walker.each(function() {
+      const child = this
       
-      if (newHtml2 !== html) {
-        $(content).html(newHtml2)
+      // 只处理文本节点
+      if (child.nodeType === 3) { // Node.TEXT_NODE
+        const text = child.nodeValue || ''
+        
+        // 检查是否包含Markdown链接格式
+        if (/\[([^\]]+)\]\(([^)]+)\)/.test(text)) {
+          // 创建临时容器来解析替换后的HTML
+          const replacedText = text.replace(
+            /\[([^\]]+)\]\(([^)]+)\)/g,
+            '<a href="$2" target="_blank" rel="noopener noreferrer">$1</a>'
+          )
+          
+          // 创建新节点并替换
+          const tempDiv = $('<div>').html(replacedText)
+          $(child).replaceWith(tempDiv.contents())
+        }
+      } 
+      // 递归处理子元素（但跳过a, pre, code标签）
+      else if (child.nodeType === 1) { // Node.ELEMENT_NODE
+        const tagName = child.tagName.toLowerCase()
+        if (tagName !== 'a' && tagName !== 'pre' && tagName !== 'code') {
+          processTextNodes(child)
+        }
       }
-    }
+    })
   }
+  
+  // 开始处理
+  processTextNodes(content)
   
   $(content).find('pre').each((_index, pre) => {
     try {
