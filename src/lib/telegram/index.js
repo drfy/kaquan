@@ -319,6 +319,26 @@ function modifyHTMLContent($, content, { index } = {}) {
   return content
 }
 
+function normalizeMarkdownLinkHtml(html = '') {
+  if (!html) {
+    return ''
+  }
+
+  return html
+    .replace(
+      /\[<a[^>]*>([^<]+)<\/a>\]\(<a[^>]*href="([^"]+)"[^>]*>[^<]*<\/a>\)/g,
+      '<a href="$2" target="_blank" rel="noopener noreferrer" title="$1">$1</a>',
+    )
+    .replace(
+      /\[([^\]]+)\]\(<a[^>]*href="([^"]+)"[^>]*>[^<]*<\/a>\)/g,
+      '<a href="$2" target="_blank" rel="noopener noreferrer" title="$1">$1</a>',
+    )
+    .replace(
+      /\[<a\b[^>]*>([^<]+)<\/a>\]\((https?:\/\/[^)\s]+)\)/g,
+      '<a href="$2" target="_blank" rel="noopener noreferrer" title="$1">$1</a>',
+    )
+}
+
 function getPost($, item, { channel, staticProxy, index = 0 }) {
   item = item ? $(item).find('.tgme_widget_message') : $('.tgme_widget_message')
   const content = $(item).find('.js-message_reply_text')?.length > 0
@@ -330,6 +350,10 @@ function getPost($, item, { channel, staticProxy, index = 0 }) {
   const tags = $(content).find('a[href^="?q="]')?.each((_index, a) => {
     $(a)?.attr('href', `/search/${encodeURIComponent($(a)?.text())}`)
   })?.map((_index, a) => $(a)?.text()?.replace('#', ''))?.get()
+  const normalizedContentHtml = normalizeMarkdownLinkHtml(content?.html() || '')
+  const normalizedContent = cheerio.load(`<div>${normalizedContentHtml}</div>`, {}, false)('div')
+  const normalizedText = normalizedContent.text()
+  const normalizedTitle = normalizedText.match(/^.*?(?=[銆俓n]|http\S)/g)?.[0] ?? title ?? normalizedText ?? ''
 
   // 提取文章查看数和互动数据
   const viewsText = $(item).find('.tgme_widget_message_views')?.text() || ''
@@ -343,19 +367,19 @@ function getPost($, item, { channel, staticProxy, index = 0 }) {
 
   return {
     id,
-    title,
+    title: normalizedTitle,
     type: $(item).attr('class')?.includes('service_message') ? 'service' : 'text',
     datetime: $(item).find('.tgme_widget_message_date time')?.attr('datetime'),
     tags,
-    text: content?.text(),
+    text: normalizedText,
     views,
     forwards,
     content: [
       getReply($, item, { channel }),
-      getImages($, item, { staticProxy, id, index, title }),
-      getVideo($, item, { staticProxy, id, index, title }),
-      getAudio($, item, { staticProxy, id, index, title }),
-      content?.html(),
+      getImages($, item, { staticProxy, id, index, title: normalizedTitle }),
+      getVideo($, item, { staticProxy, id, index, title: normalizedTitle }),
+      getAudio($, item, { staticProxy, id, index, title: normalizedTitle }),
+      normalizedContentHtml,
       getImageStickers($, item, { staticProxy, index }),
       getVideoStickers($, item, { staticProxy, index }),
       // $(item).find('.tgme_widget_message_sticker_wrap')?.html(),
