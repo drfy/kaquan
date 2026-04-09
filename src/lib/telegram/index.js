@@ -110,32 +110,32 @@ function modifyHTMLContent($, content, { index } = {}) {
       ?.wrap('<label class="spoiler-button"></label>')
       ?.before(`<input type="checkbox" />`)
   })
-  
+
   // 处理Markdown格式的超链接 [文字](链接)
   // 使用安全的DOM遍历方式，避免破坏HTML结构
   function processTextNodes(node) {
     const walker = $(node).contents()
-    
-    walker.each(function() {
+
+    walker.each(function () {
       const child = this
-      
+
       // 只处理文本节点
       if (child.nodeType === 3) { // Node.TEXT_NODE
         const text = child.nodeValue || ''
-        
+
         // 检查是否包含Markdown链接格式
-        if (/\[([^\]]+)\]\(([^)]+)\)/.test(text)) {
+        if (/\[[^\]]+\]\([^)]+\)/.test(text)) {
           // 创建临时容器来解析替换后的HTML
           const replacedText = text.replace(
             /\[([^\]]+)\]\(([^)]+)\)/g,
-            '<a href="$2" target="_blank" rel="noopener noreferrer">$1</a>'
+            '<a href="$2" target="_blank" rel="noopener noreferrer">$1</a>',
           )
-          
+
           // 创建新节点并替换
           const tempDiv = $('<div>').html(replacedText)
           $(child).replaceWith(tempDiv.contents())
         }
-      } 
+      }
       // 递归处理子元素（但跳过a, pre, code标签）
       else if (child.nodeType === 1) { // Node.ELEMENT_NODE
         const tagName = child.tagName.toLowerCase()
@@ -145,10 +145,163 @@ function modifyHTMLContent($, content, { index } = {}) {
       }
     })
   }
-  
+
   // 开始处理
+  function restoreSplitMarkdownLinks(node) {
+    let hasChanges = true
+
+    while (hasChanges) {
+      hasChanges = false
+      const children = $(node).contents().toArray()
+
+      for (let i = 0; i < children.length; i++) {
+        const current = children[i]
+        const next = children[i + 1]
+        const afterNext = children[i + 2]
+        const third = children[i + 3]
+        const fourth = children[i + 4]
+
+        if (current?.nodeType !== 3) {
+          continue
+        }
+
+        const currentText = current.nodeValue || ''
+
+        if (
+          next?.nodeType === 1
+          && next.tagName?.toLowerCase() === 'a'
+          && afterNext?.nodeType === 3
+        ) {
+          const nextText = afterNext.nodeValue || ''
+          const openIndex = currentText.lastIndexOf('[')
+          const closeIndex = currentText.lastIndexOf('](')
+          const hasWrappedLabel = openIndex !== -1 && closeIndex > openIndex && currentText.endsWith('(')
+
+          if (hasWrappedLabel && nextText.startsWith(')')) {
+            const prefix = currentText.slice(0, openIndex)
+            const label = currentText.slice(openIndex + 1, closeIndex)
+            const suffix = nextText.slice(1)
+            const link = $(next).clone()
+
+            link.text(label)
+              .attr('target', '_blank')
+              .attr('rel', 'noopener noreferrer')
+
+            current.nodeValue = prefix
+            $(next).replaceWith(link)
+            afterNext.nodeValue = suffix
+
+            if (!current.nodeValue) {
+              $(current).remove()
+            }
+            if (!afterNext.nodeValue) {
+              $(afterNext).remove()
+            }
+
+            hasChanges = true
+            break
+          }
+        }
+
+        if (
+          next?.nodeType === 1
+          && next.tagName?.toLowerCase() === 'a'
+          && afterNext?.nodeType === 3
+        ) {
+          const nextText = afterNext.nodeValue || ''
+
+          if (currentText.endsWith('[') && nextText.startsWith('](')) {
+            const closingIndex = nextText.indexOf(')', 2)
+
+            if (closingIndex === -1) {
+              continue
+            }
+
+            const prefix = currentText.slice(0, -1)
+            const href = nextText.slice(2, closingIndex)
+            const suffix = nextText.slice(closingIndex + 1)
+            const text = $(next).text()
+            const link = $('<a>')
+              .attr('href', href)
+              .attr('target', '_blank')
+              .attr('rel', 'noopener noreferrer')
+              .attr('title', text)
+              .text(text)
+
+            current.nodeValue = prefix
+            $(next).replaceWith(link)
+            afterNext.nodeValue = suffix
+
+            if (!current.nodeValue) {
+              $(current).remove()
+            }
+            if (!afterNext.nodeValue) {
+              $(afterNext).remove()
+            }
+
+            hasChanges = true
+            break
+          }
+        }
+
+        if (
+          next?.nodeType === 1
+          && next.tagName?.toLowerCase() === 'a'
+          && afterNext?.nodeType === 3
+          && third?.nodeType === 1
+          && third.tagName?.toLowerCase() === 'a'
+          && fourth?.nodeType === 3
+        ) {
+          const middleText = afterNext.nodeValue || ''
+          const fourthText = fourth.nodeValue || ''
+
+          if (currentText.endsWith('[') && middleText === '](' && fourthText.startsWith(')')) {
+            const prefix = currentText.slice(0, -1)
+            const suffix = fourthText.slice(1)
+            const text = $(next).text()
+            const href = $(third).attr('href')
+            const link = $('<a>')
+              .attr('href', href)
+              .attr('target', '_blank')
+              .attr('rel', 'noopener noreferrer')
+              .attr('title', text)
+              .text(text)
+
+            current.nodeValue = prefix
+            $(next).replaceWith(link)
+            $(afterNext).remove()
+            $(third).remove()
+            fourth.nodeValue = suffix
+
+            if (!current.nodeValue) {
+              $(current).remove()
+            }
+            if (!fourth.nodeValue) {
+              $(fourth).remove()
+            }
+
+            hasChanges = true
+            break
+          }
+        }
+      }
+    }
+
+    $(node).contents().each(function () {
+      const child = this
+
+      if (child.nodeType === 1) {
+        const tagName = child.tagName.toLowerCase()
+        if (tagName !== 'a' && tagName !== 'pre' && tagName !== 'code') {
+          restoreSplitMarkdownLinks(child)
+        }
+      }
+    })
+  }
+
   processTextNodes(content)
-  
+  restoreSplitMarkdownLinks(content)
+
   $(content).find('pre').each((_index, pre) => {
     try {
       $(pre).find('br')?.replaceWith('\n')
@@ -162,7 +315,7 @@ function modifyHTMLContent($, content, { index } = {}) {
       console.error(error)
     }
   })
-  
+
   return content
 }
 
@@ -182,7 +335,7 @@ function getPost($, item, { channel, staticProxy, index = 0 }) {
   const viewsText = $(item).find('.tgme_widget_message_views')?.text() || ''
   const viewsMatch = viewsText.match(/(\d+(?:\.\d+)?[KMB]?)/i)
   const views = viewsMatch ? viewsMatch[1] : '0'
-  
+
   // 提取转发/评论数（如果有的话）
   const forwardsText = $(item).find('.tgme_widget_message_forwards')?.text() || ''
   const forwardsMatch = forwardsText.match(/(\d+(?:\.\d+)?[KMB]?)/i)
@@ -275,7 +428,7 @@ export async function getChannelInfo(Astro, { before = '', after = '', q = '', t
   const subscribersMatch = statsText.match(/(\d+)\s*subscribers?/i)
   const photosMatch = statsText.match(/(\d+)\s*photos?/i)
   const linksMatch = statsText.match(/(\d+)\s*links?/i)
-  
+
   const channelInfo = {
     posts,
     title: $('.tgme_channel_info_header_title')?.text(),
@@ -283,10 +436,10 @@ export async function getChannelInfo(Astro, { before = '', after = '', q = '', t
     descriptionHTML: modifyHTMLContent($, $('.tgme_channel_info_description'))?.html(),
     avatar: $('.tgme_page_photo_image img')?.attr('src'),
     stats: {
-      subscribers: subscribersMatch ? parseInt(subscribersMatch[1]) : 0,
-      photos: photosMatch ? parseInt(photosMatch[1]) : 0, 
-      links: linksMatch ? parseInt(linksMatch[1]) : 0,
-    }
+      subscribers: subscribersMatch ? Number.parseInt(subscribersMatch[1]) : 0,
+      photos: photosMatch ? Number.parseInt(photosMatch[1]) : 0,
+      links: linksMatch ? Number.parseInt(linksMatch[1]) : 0,
+    },
   }
 
   cache.set(cacheKey, channelInfo)
